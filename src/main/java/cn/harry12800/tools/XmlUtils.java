@@ -317,6 +317,7 @@ public class XmlUtils {
 	/**
 	 * 将file类型的xml转换成对象
 	 */
+	@SuppressWarnings("unchecked")
 	public static <A> A convertXmlFileToObject(Class<A> clazz, String xmlPath) {
 		Object xmlObject = null;
 		try {

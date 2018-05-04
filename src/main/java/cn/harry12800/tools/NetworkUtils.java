@@ -2,7 +2,6 @@ package cn.harry12800.tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -420,10 +419,6 @@ public class NetworkUtils {
 	public static ImageIcon getImageByUrl(URL url) throws Exception {
 		BufferedInputStream bis = null;
 		HttpURLConnection httpUrl = null;
-		FileOutputStream fos = null;
-		int BUFFER_SIZE = 1024;
-		byte[] buf = new byte[BUFFER_SIZE];
-		int size = 0;
 		try {
 			httpUrl = (HttpURLConnection) url.openConnection();
 			httpUrl.setConnectTimeout(5000);
@@ -437,7 +432,6 @@ public class NetworkUtils {
 
 			byte[] byteArray = FileUtils.toByteArray(bis);
 			System.out.println(byteArray.length);
-			ByteArrayInputStream in = new ByteArrayInputStream(byteArray); //将b作为输入流；
 			//			BufferedImage image = ImageIO.read(  in);     //将in作为输入流，读取图片存入image中，而这里in可以为ByteArrayInputStream();
 			ImageIcon sdIcon = new ImageIcon(byteArray);
 			return sdIcon;
