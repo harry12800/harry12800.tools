@@ -88,15 +88,16 @@ public class FileUtils {
 		for (Entry<Object, Object> entry : props.entrySet()) {
 			String key = new String(
 					(entry.getKey() + "").getBytes("ISO8859-1"), "utf-8")
-					.trim();
+							.trim();
 			String value = new String(
 					(entry.getValue() + "").getBytes("ISO8859-1"), "utf-8")
-					.trim();
+							.trim();
 			// StringUtils.errorln(key+":"+value);
 			map.put(key, value);// 配置文件必须设置成utf-8格式，并支持中文
 		}
 		return map;
 	}
+
 	/**
 	 * 修改配置
 	 * @param file
@@ -104,9 +105,9 @@ public class FileUtils {
 	 * @param value
 	 * @throws Exception
 	 */
-	public static void modifyProperties( File file,String key, String value) throws Exception{
+	public static void modifyProperties(File file, String key, String value) throws Exception {
 		Properties prop = new Properties();
-		prop.load(new FileInputStream(file) );
+		prop.load(new FileInputStream(file));
 		prop.setProperty(key, value);
 		FileOutputStream outputFile = new FileOutputStream(file);
 		prop.store(outputFile, "modify");
@@ -124,10 +125,11 @@ public class FileUtils {
 		}
 		return map;
 	}
-	public static Map<String, String> file2Map(String filePath,String charset)
+
+	public static Map<String, String> file2Map(String filePath, String charset)
 			throws IOException {
 		Map<String, String> map = new LinkedHashMap<String, String>(0);
-		List<String> rowByFile = getRowByFile(new File(filePath),charset);
+		List<String> rowByFile = getRowByFile(new File(filePath), charset);
 		for (String str : rowByFile) {
 			String[] split = str.split("=");
 			if (split.length != 2)
@@ -136,6 +138,7 @@ public class FileUtils {
 		}
 		return map;
 	}
+
 	/**
 	 * 
 	 * @param filePath
@@ -153,10 +156,10 @@ public class FileUtils {
 		for (Entry<Object, Object> entry : props.entrySet()) {
 			String key = new String(
 					(entry.getKey() + "").getBytes("ISO8859-1"), "utf-8")
-					.trim();
+							.trim();
 			String value = new String(
 					(entry.getValue() + "").getBytes("ISO8859-1"), "utf-8")
-					.trim();
+							.trim();
 			StringUtils.errorln(key + ":" + value);
 			map.put(key, value);// 配置文件必须设置成utf-8格式，并支持中文
 		}
@@ -178,9 +181,10 @@ public class FileUtils {
 			StringUtils.errorln("b===" + b);
 			StringUtils.errorln("创建目录啦" + path);
 		} else {
-//			StringUtils.outln("//目录存在");
+			//			StringUtils.outln("//目录存在");
 		}
 	}
+
 	/**
 	 * 方法说明：创建文件
 	 * 
@@ -190,6 +194,7 @@ public class FileUtils {
 		File file = new File(pathFile);
 		createFile(file);
 	}
+
 	/**
 	 * 方法说明：创建文件
 	 * @param file
@@ -250,7 +255,6 @@ public class FileUtils {
 			return file.delete();
 		return true;
 	}
-	
 
 	/**
 	 * 得到文件的每一行内容存入list
@@ -258,11 +262,11 @@ public class FileUtils {
 	 * @param file
 	 * @return
 	 */
-	public static List<String> getRowByFile(File file,String charset) {
+	public static List<String> getRowByFile(File file, String charset) {
 		List<String> list = new ArrayList<String>(0);
 		String line;
 		try (FileInputStream in = new FileInputStream(file);
-				InputStreamReader read = new InputStreamReader(in,charset);
+				InputStreamReader read = new InputStreamReader(in, charset);
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				list.add(line);
@@ -272,6 +276,7 @@ public class FileUtils {
 		}
 		return list;
 	}
+
 	/**
 	 * 方法说明：递归删除目录及子目录
 	 * @param filepath
@@ -282,22 +287,23 @@ public class FileUtils {
 		if (f.exists() && f.isDirectory()) {
 			// 判断是文件还是目录
 			if (f.listFiles().length == 0) {// 若目录下没有文件则直接删除
-				mark=mark&&f.delete();
+				mark = mark && f.delete();
 			} else {
 				// 若有则把文件放进数组，并判断是否有下级目录
 				File delFile[] = f.listFiles();
 				int i = f.listFiles().length;
 				for (int j = 0; j < i; j++) {
 					if (delFile[j].isDirectory()) {
-						mark=mark&&delPath(delFile[j].getAbsolutePath());// 递归调用del方法并取得子目录路径
+						mark = mark && delPath(delFile[j].getAbsolutePath());// 递归调用del方法并取得子目录路径
 					}
 					delFile[j].delete();// 删除文件
 				}
-				mark=mark&&f.delete();
+				mark = mark && f.delete();
 			}
 		}
 		return mark;
 	}
+
 	/**
 	 * 将本目录的文件全部复制到des目录下
 	 * @param src
@@ -313,15 +319,15 @@ public class FileUtils {
 		byte[] b = new byte[(int) file.length()];
 		if (file.isFile()) {
 
-			if(!file1.exists()) {
+			if (!file1.exists()) {
 				file1.getParentFile().mkdirs();
 				file1.createNewFile();
 			}
 			try (FileInputStream is = new FileInputStream(file);
-					FileOutputStream ps = new FileOutputStream(file1);){
+					FileOutputStream ps = new FileOutputStream(file1);) {
 				is.read(b);
 				ps.write(b);
-			}  
+			}
 		} else if (file.isDirectory()) {
 			if (!file.exists())
 				file.mkdir();
@@ -331,6 +337,7 @@ public class FileUtils {
 			}
 		}
 	}
+
 	/**
 	 * 复制文件到目录下。
 	 * @param srcFilePath
@@ -341,8 +348,9 @@ public class FileUtils {
 	public static boolean copyFile(String srcFilePath, String destDirPath) throws IOException {
 		// 被移动的文件夹
 		File file = new File(srcFilePath);
-		return 	copyFile(srcFilePath,destDirPath,file.getName());
+		return copyFile(srcFilePath, destDirPath, file.getName());
 	}
+
 	/**
 	 * 复制文件到目录下。
 	 * @param srcFilePath
@@ -350,25 +358,27 @@ public class FileUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static boolean copyFile(String srcFilePath,String destDirPath,String name) throws IOException {
+	public static boolean copyFile(String srcFilePath, String destDirPath, String name) throws IOException {
 		// 被移动的文件夹
 		File file = new File(srcFilePath);
 		// 目标文件夹
 		File dir = new File(destDirPath);
-		if(!dir.exists())dir.mkdir();
+		if (!dir.exists())
+			dir.mkdir();
 		// 将文件移动到另一个文件目录下
-		File descFile = new File(dir.getAbsolutePath()+File.separator+name);
-		if(!descFile.exists())
+		File descFile = new File(dir.getAbsolutePath() + File.separator + name);
+		if (!descFile.exists())
 			descFile.createNewFile();
 		byte[] b = new byte[(int) file.length()];
 		try (FileInputStream is = new FileInputStream(file);
-				FileOutputStream ps = new FileOutputStream(descFile);){
+				FileOutputStream ps = new FileOutputStream(descFile);) {
 			is.read(b);
 			ps.write(b);
-		}  
+		}
 		boolean success = file.renameTo(new File(dir, file.getName()));
 		return success;
 	}
+
 	/**
 	 * 复制文件到目录下。
 	 * @param srcFilePath
@@ -378,16 +388,17 @@ public class FileUtils {
 	 */
 	public static boolean copyIOFile(File src, File desc) throws IOException {
 		// 将文件移动到另一个文件目录下
-		if(!desc.exists())
+		if (!desc.exists())
 			desc.createNewFile();
 		byte[] b = new byte[(int) src.length()];
 		try (FileInputStream is = new FileInputStream(src);
-				FileOutputStream ps = new FileOutputStream(desc);){
+				FileOutputStream ps = new FileOutputStream(desc);) {
 			is.read(b);
 			ps.write(b);
-		}  
+		}
 		return true;
 	}
+
 	/**
 	 * 将文件夹移动到另一个位置
 	 * @param srcPath
@@ -404,13 +415,14 @@ public class FileUtils {
 		StringUtils.errorln(success);
 		return success;
 	}
+
 	/**
 	 * 把文件<code>file</code>移到dirpath文件夹下
 	 * @param file
 	 * @param dirPath
 	 */
 	public static void moveFile(File file, String dirPath) {
-		if(!file.exists()){
+		if (!file.exists()) {
 			StringUtils.errorln("文件不存在！没法移走！");
 		}
 		createDirectory(dirPath);
@@ -419,29 +431,30 @@ public class FileUtils {
 		StringUtils.errorln(path);
 		file.renameTo(new File(path));
 	}
+
 	/**
 	 * 把文件<code>file</code>移到dirpath文件夹下
 	 * @param file
 	 * @param dirPath
 	 */
-	public static boolean moveFile(File file, String dirPath,boolean force) {
-		if(!file.exists()){
+	public static boolean moveFile(File file, String dirPath, boolean force) {
+		if (!file.exists()) {
 			StringUtils.errorln("文件不存在！没法移走！");
 		}
 		createDirectory(dirPath);
 		String path = new File(dirPath).getAbsolutePath() + File.separator
 				+ file.getName();
 		StringUtils.errorln(path);
-		if(force){
+		if (force) {
 			File desfile = new File(path);
-			if(desfile.exists()&&desfile.isFile()){
+			if (desfile.exists() && desfile.isFile()) {
 				desfile.delete();
 				StringUtils.errorln("删除原有文件");
 			}
 		}
 		boolean renameTo = file.renameTo(new File(path));
 		System.out.println("renameto失败！@");
-		if(!renameTo){
+		if (!renameTo) {
 			try {
 				FileUtils.copyIOFile(file, new File(path));
 				file.delete();
@@ -453,6 +466,7 @@ public class FileUtils {
 		}
 		return true;
 	}
+
 	/**
 	 * 把第一个路径下的移到dirpath文件夹下
 	 * @param file
@@ -461,13 +475,14 @@ public class FileUtils {
 	public static void moveFile(String file, String dirPath) {
 		moveFile(new File(file), dirPath);
 	}
+
 	/**
 	 * 把第一个路径下的移到dirpath文件夹下
 	 * @param file
 	 * @param dirPath
 	 */
-	public static void moveFile(String file, String dirPath,boolean force) {
-		moveFile(new File(file), dirPath,force);
+	public static void moveFile(String file, String dirPath, boolean force) {
+		moveFile(new File(file), dirPath, force);
 	}
 
 	/**
@@ -490,7 +505,7 @@ public class FileUtils {
 		}
 		return list;
 	}
-	 
+
 	/**
 	 * 得到文件的第从start行到end行内容存入sb
 	 * 
@@ -514,6 +529,7 @@ public class FileUtils {
 		}
 		return sb;
 	}
+
 	/**
 	 * 得到文件的第从start行到end行内容存入sb
 	 * 
@@ -537,6 +553,7 @@ public class FileUtils {
 		}
 		return sb;
 	}
+
 	/**
 	 * 获取文件中的文本  数据会在一行
 	 * @param path
@@ -615,6 +632,7 @@ public class FileUtils {
 		}
 		return html.toString();
 	}
+
 	/**
 	 * 获取文件中的文本
 	 * 
@@ -622,11 +640,11 @@ public class FileUtils {
 	 * @return
 	 * @throws Exception 
 	 */
-	public static String getSrcByFilePath(String path,String charset) throws Exception {
+	public static String getSrcByFilePath(String path, String charset) throws Exception {
 		String line;
 		StringBuffer html = new StringBuffer("");
 		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path),charset);
+				new FileInputStream(path), charset);
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -636,17 +654,18 @@ public class FileUtils {
 		}
 		return html.toString();
 	}
+
 	/**
 	 * 获取文件中的文本
 	 * 
 	 * @param path
 	 * @return
 	 */
-	public static String getSrcByFilePath(File file,String charset) {
+	public static String getSrcByFilePath(File file, String charset) {
 		String line;
 		StringBuffer html = new StringBuffer("");
 		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(file),charset);
+				new FileInputStream(file), charset);
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -656,6 +675,7 @@ public class FileUtils {
 		}
 		return html.toString();
 	}
+
 	/**
 	 * 获取文件中的文本
 	 * 
@@ -670,7 +690,7 @@ public class FileUtils {
 				.getResourceAsStream(fileName), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
-				html = html.append(line+"\r\n");
+				html = html.append(line + "\r\n");
 			}
 			if (html.indexOf("gb2312") > 0) {
 				StringUtils.errorln("2");
@@ -734,11 +754,11 @@ public class FileUtils {
 	public static String createFile(Class<?> clazz, String fileName)
 			throws IOException {
 		String path = clazz.getName();
-		System.out.println(clazz.getName()+"   "+fileName);
+		System.out.println(clazz.getName() + "   " + fileName);
 		path = path.replaceAll("[.]", "\\\\");
 		path = "src\\" + path;
 		File file = new File(path);
-		System.out.println(   file.getParentFile().getAbsolutePath());
+		System.out.println(file.getParentFile().getAbsolutePath());
 		path = file.getParentFile().getAbsoluteFile() + "\\" + fileName;
 		file = new File(path);
 		if (!file.exists()) {
@@ -781,6 +801,7 @@ public class FileUtils {
 				content);
 		FileUtils.writeContent(filePath, fileContent);
 	}
+
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
@@ -792,18 +813,20 @@ public class FileUtils {
 			e1.printStackTrace();
 		}
 	}
+
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
 	public static synchronized void writeContent(String filePath,
-			String content,String charset) {
+			String content, String charset) {
 		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(
-                filePath), charset);BufferedWriter bWriter = new BufferedWriter(osw)) {
+				filePath), charset); BufferedWriter bWriter = new BufferedWriter(osw)) {
 			osw.write(content);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
+
 	/**
 	 * 将文件 所有row集合中的行位置 首尾添加prefix，suffix
 	 * 
@@ -884,10 +907,10 @@ public class FileUtils {
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
-	public static synchronized void addContent(String filePath, Map<?,?> map) {
+	public static synchronized void addContent(String filePath, Map<?, ?> map) {
 		StringBuilder sbBuilder = new StringBuilder();
 		for (Entry<?, ?> entry : map.entrySet()) {
-			sbBuilder.append(entry.getKey() + "="+ entry.getValue()+"\r\n");
+			sbBuilder.append(entry.getKey() + "=" + entry.getValue() + "\r\n");
 		}
 		try (FileWriter writer = new FileWriter(filePath, true);) {
 			writer.write(sbBuilder.toString());
@@ -895,22 +918,24 @@ public class FileUtils {
 			e1.printStackTrace();
 		}
 	}
+
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
 	public static synchronized void addContent(String filePath, String content) {
-		
+
 		try (FileWriter writer = new FileWriter(filePath, true);) {
 			writer.write(content);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
+
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
 	public static synchronized void addContentByTrue(String filePath, String content) {
-		if(!new File(filePath).exists()){
+		if (!new File(filePath).exists()) {
 			createFile(new File(filePath));
 		}
 		try (FileWriter writer = new FileWriter(filePath, true);) {
@@ -919,6 +944,7 @@ public class FileUtils {
 			e1.printStackTrace();
 		}
 	}
+
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
@@ -929,6 +955,7 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 *  把byte数组写出到文件
 	 * @param filename
@@ -936,13 +963,13 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	static public void writeFile(String filename, byte data[])
-				throws IOException {
+			throws IOException {
 		createFile(filename);
-		try(FileOutputStream fout = new FileOutputStream(filename);){
+		try (FileOutputStream fout = new FileOutputStream(filename);) {
 			fout.write(data);
 		}
 	}
- 
+
 	public static File inputStream2File(String fileName, InputStream is)
 			throws Exception {
 		File file = new File(fileName);
@@ -1020,19 +1047,17 @@ public class FileUtils {
 	 */
 	public static void ZipContraFile(String zippath, String outfilepath,
 			String filename) {
-		try {
-			File file = new File(zippath);// 压缩文件路径和文件名
-			File outFile = new File(outfilepath);// 解压后路径和文件名
-			java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);
+		File file = new File(zippath);// 压缩文件路径和文件名
+		File outFile = new File(outfilepath);// 解压后路径和文件名
+		try (java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);) {
 			java.util.zip.ZipEntry entry = zipFile.getEntry(filename);// 所解压的文件名
-			InputStream input = zipFile.getInputStream(entry);
-			OutputStream output = new FileOutputStream(outFile);
-			int temp = 0;
-			while ((temp = input.read()) != -1) {
-				output.write(temp);
+			try (InputStream input = zipFile.getInputStream(entry);
+					OutputStream output = new FileOutputStream(outFile);) {
+				int temp = 0;
+				while ((temp = input.read()) != -1) {
+					output.write(temp);
+				}
 			}
-			input.close();
-			output.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1045,12 +1070,11 @@ public class FileUtils {
 	 * ZipContraMultiFile("d:/hello.zip", "d:/");
 	 * */
 	public static void ZipContraMultiFile(String zippath, String outzippath) {
-		try {
-			File file = new File(zippath);
-			File outFile = null;
-			java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);
-			ZipInputStream zipInput = new ZipInputStream(new FileInputStream(
-					file));
+		File file = new File(zippath);
+		File outFile = null;
+		try (java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);
+				ZipInputStream zipInput = new ZipInputStream(new FileInputStream(
+						file));) {
 			ZipEntry entry = null;
 			InputStream input = null;
 			OutputStream output = null;
@@ -1085,11 +1109,12 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static byte[] file2byte(String filePath) throws IOException {
-		try(InputStream in = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(filePath);){
-				return toByteArray(in);
+		try (InputStream in = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream(filePath);) {
+			return toByteArray(in);
 		}
 	}
+
 	/**
 	 * 将文件读入至字节数组,文件路径是指服务器文件系统路径
 	 * @param filePath
@@ -1097,87 +1122,74 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static byte[] file2byte1(String filePath) throws IOException {
-		try(InputStream in = new FileInputStream(filePath);){
-				return toByteArray(in);
+		try (InputStream in = new FileInputStream(filePath);) {
+			return toByteArray(in);
 		}
 	}
-	 //inputStream转outputStream
-    public static ByteArrayOutputStream parse(InputStream in) throws Exception
-    {
-        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
-        int ch;
-        while ((ch = in.read()) != -1) {   
-            swapStream.write(ch);   
-        }
-        return swapStream;
-    }
-    //outputStream转inputStream
-    public static ByteArrayInputStream parse(OutputStream out) throws Exception
-    {
-        ByteArrayOutputStream   baos=new   ByteArrayOutputStream();
-        baos=(ByteArrayOutputStream) out;
-        ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
-        return swapStream;
-    }
+
+	//inputStream转outputStream
+	public static ByteArrayOutputStream parse(InputStream in) throws Exception {
+		ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+		int ch;
+		while ((ch = in.read()) != -1) {
+			swapStream.write(ch);
+		}
+		return swapStream;
+	}
+
+	//outputStream转inputStream
+	public static ByteArrayInputStream parse(OutputStream out) throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		baos = (ByteArrayOutputStream) out;
+		ByteArrayInputStream swapStream = new ByteArrayInputStream(baos.toByteArray());
+		return swapStream;
+	}
+
 	/**
 	 * 字节到文件。
 	 * @param buf
 	 * @param filePath
 	 * @param fileName
 	 */
-	public static void byte2File(byte[] buf, String filePath, String fileName)  
-    {  
-        BufferedOutputStream bos = null;  
-        FileOutputStream fos = null;  
-        File file = null;  
-        try  
-        {  
-            File dir = new File(filePath);  
-            if (!dir.exists() && dir.isDirectory())  
-            {  
-                dir.mkdirs();  
-            }  
-            file = new File(filePath + File.separator + fileName);  
-            fos = new FileOutputStream(file);  
-            bos = new BufferedOutputStream(fos);  
-            bos.write(buf);  
-        }  
-        catch (Exception e)  
-        {  
-            e.printStackTrace();  
-        }  
-        finally  
-        {  
-            if (bos != null)  
-            {  
-                try  
-                {  
-                    bos.close();  
-                }  
-                catch (IOException e)  
-                {  
-                    e.printStackTrace();  
-                }  
-            }  
-            if (fos != null)  
-            {  
-                try  
-                {  
-                    fos.close();  
-                }  
-                catch (IOException e)  
-                {  
-                    e.printStackTrace();  
-                }  
-            }  
-        }  
-    }
+	public static void byte2File(byte[] buf, String filePath, String fileName) {
+		BufferedOutputStream bos = null;
+		FileOutputStream fos = null;
+		File file = null;
+		try {
+			File dir = new File(filePath);
+			if (!dir.exists() && dir.isDirectory()) {
+				dir.mkdirs();
+			}
+			file = new File(filePath + File.separator + fileName);
+			fos = new FileOutputStream(file);
+			bos = new BufferedOutputStream(fos);
+			bos.write(buf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (bos != null) {
+				try {
+					bos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 	// 把文件读入byte数组
 	static public byte[] readFile(String filename) throws IOException {
 		File file = new File(filename);
 		long len = file.length();
 		byte data[] = new byte[(int) len];
-		try(FileInputStream fin = new FileInputStream(file);){
+		try (FileInputStream fin = new FileInputStream(file);) {
 			int r = fin.read(data);
 			if (r != len)
 				throw new IOException("Only read " + r + " of " + len + " for "
@@ -1185,6 +1197,7 @@ public class FileUtils {
 		}
 		return data;
 	}
+
 	/**
 	 * 将文件写入流中
 	 * @param filePath
@@ -1195,6 +1208,7 @@ public class FileUtils {
 				.getResourceAsStream(filePath);
 		return in;
 	}
+
 	/**
 	 * 流转字节数组
 	 * @param in
@@ -1202,8 +1216,8 @@ public class FileUtils {
 	 * @throws IOException
 	 */
 	public static byte[] toByteArray(InputStream in) throws IOException {
-		try(
-			ByteArrayOutputStream out = new ByteArrayOutputStream();){
+		try (
+				ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			byte[] buffer = new byte[1024 * 4];
 			int n = 0;
 			while ((n = in.read(buffer)) != -1) {
@@ -1224,7 +1238,7 @@ public class FileUtils {
 		try (InputStreamReader read = new InputStreamReader(in, "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
-				html = html.append(line+"\r\n");
+				html = html.append(line + "\r\n");
 			}
 			if (html.indexOf("gb2312") > 0) {
 				StringUtils.errorln("2");
@@ -1241,23 +1255,23 @@ public class FileUtils {
 	 * @param filter 过滤器
 	 * @return
 	 */
-	public static List<File> traverseDir(String configPath,FilenameFilter filter) {
+	public static List<File> traverseDir(String configPath, FilenameFilter filter) {
 		File file = new File(configPath);
 		List<File> lists = Lists.newArrayList();
-		if(file == null || file.isFile()){
+		if (file == null || file.isFile()) {
 			return lists;
-		}else {
-			
+		} else {
+
 			File[] listFiles = file.listFiles();
-			if(listFiles!=null)
-			for (File file2 : listFiles) {
-				if(filter.accept(file2, file2.getName())){
-					lists.add(file2);
+			if (listFiles != null)
+				for (File file2 : listFiles) {
+					if (filter.accept(file2, file2.getName())) {
+						lists.add(file2);
+					}
+					if (file2.isDirectory()) {
+						lists.addAll(traverseDir(file2.getAbsolutePath(), filter));
+					}
 				}
-				if(file2.isDirectory()){
-					lists.addAll(traverseDir(file2.getAbsolutePath(), filter) );
-				}
-			}
 			return lists;
 		}
 	}
@@ -1269,40 +1283,41 @@ public class FileUtils {
 	 */
 	public static void parse(InputStream inputStream,
 			OutputStream outputStream) {
-			byte buffer[] = new byte[10240];
-			int len = 0;
-			try {
-				while ((len = inputStream.read(buffer)) > 0) {
-					outputStream.write(buffer, 0, len);
-					outputStream.flush();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+		byte buffer[] = new byte[10240];
+		int len = 0;
+		try {
+			while ((len = inputStream.read(buffer)) > 0) {
+				outputStream.write(buffer, 0, len);
+				outputStream.flush();
 			}
-			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
+
 	/**
 	 * 获取文件的大小 ，非文件夹，如果是文件夹 或者文件不存在 将返回 "";
 	 * 
 	 * @param file
 	 * @return
 	 */
-	public static String getFileSize(File file){
-		if(file.exists()){
-			if(file.isDirectory()) {
+	public static String getFileSize(File file) {
+		if (file.exists()) {
+			if (file.isDirectory()) {
 				return "";
-			}else{
-				char[] ch= new char[]{'B','K','M','G','T','P','Z','E'};
+			} else {
+				char[] ch = new char[] { 'B', 'K', 'M', 'G', 'T', 'P', 'Z', 'E' };
 				double length = file.length();
 				int i = 0;
-				while(length>=1024){
-					length = length/1024;
+				while (length >= 1024) {
+					length = length / 1024;
 					i++;
 				}
 				NumberFormat nf = NumberFormat.getNumberInstance();
-			    nf.setMaximumFractionDigits(2);
-//				DecimalFormat df = new DecimalFormat("#.00");
-				return nf.format(length)+ch[i];
+				nf.setMaximumFractionDigits(2);
+				//				DecimalFormat df = new DecimalFormat("#.00");
+				return nf.format(length) + ch[i];
 			}
 		}
 		return "";

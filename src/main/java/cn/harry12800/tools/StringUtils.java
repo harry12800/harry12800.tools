@@ -57,30 +57,31 @@ public class StringUtils {
 	 * @param sourceStr
 	 * @return
 	 */
-    public static String MD5(String sourceStr) {
-        String result = "";
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(sourceStr.getBytes());
-            byte b[] = md.digest();
-            int i;
-            StringBuffer buf = new StringBuffer("");
-            for (int offset = 0; offset < b.length; offset++) {
-                i = b[offset];
-                if (i < 0)
-                    i += 256;
-                if (i < 16)
-                    buf.append("0");
-                buf.append(Integer.toHexString(i));
-            }
-            result = buf.toString();
-//            System.out.println("MD5(" + sourceStr + ",32) = " + result);
-//            System.out.println("MD5(" + sourceStr + ",16) = " + buf.toString().substring(8, 24));
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println(e);
-        }
-        return result;
-    }
+	public static String MD5(String sourceStr) {
+		String result = "";
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(sourceStr.getBytes());
+			byte b[] = md.digest();
+			int i;
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+			result = buf.toString();
+			//            System.out.println("MD5(" + sourceStr + ",32) = " + result);
+			//            System.out.println("MD5(" + sourceStr + ",16) = " + buf.toString().substring(8, 24));
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println(e);
+		}
+		return result;
+	}
+
 	/**
 	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c" 拼凑后的结果是： ('a','b','c');
 	 * 
@@ -981,6 +982,7 @@ public class StringUtils {
 				return true;
 		return false;
 	}
+
 	/**
 	 * 去掉标点符号切割
 	 * @param content
@@ -989,9 +991,9 @@ public class StringUtils {
 	public static List<String> split(String content) {
 		String[] authors = content.split("[，；：;, \t:?!]|(\r\n)");
 		List<String> asList = Arrays.asList(authors);
-		List<String> result  = Lists.newArrayList();
+		List<String> result = Lists.newArrayList();
 		for (String string : asList) {
-			if(!string.trim().equals("")){
+			if (!string.trim().equals("")) {
 				result.add(string);
 			}
 		}
@@ -1004,7 +1006,7 @@ public class StringUtils {
 	 * @param str2
 	 * @return
 	 */
-	public static double calcSimilar(String a,String b) {
+	public static double calcSimilar(String a, String b) {
 		int la = a.length();
 		int lb = b.length();
 		int N = la > lb ? la : lb;
@@ -1013,20 +1015,20 @@ public class StringUtils {
 		int bpath[] = new int[N + 1];
 		for (int i = 1; i <= la; i++) {
 			for (int j = 1; j <= lb; j++) {
-				if (a.charAt(i - 1) ==b.charAt(j - 1)){
+				if (a.charAt(i - 1) == b.charAt(j - 1)) {
 					dp[i][j] = dp[i - 1][j - 1] + 1;
-				}else{
+				} else {
 					dp[i][j] = dp[i - 1][j] > dp[i][j - 1] ? dp[i - 1][j]
 							: dp[i][j - 1];
 				}
-					
+
 			}
 		}
-		
+
 		/* 
-         * 矩阵中，如果matrix[m][n]的值不等于matrix[m-1][n]的值也不等于matrix[m][n-1]的值， 
-         * 则matrix[m][n]对应的字符为相似字符元，并将其存入result数组中。 
-         */  
+		 * 矩阵中，如果matrix[m][n]的值不等于matrix[m-1][n]的值也不等于matrix[m][n-1]的值， 
+		 * 则matrix[m][n]对应的字符为相似字符元，并将其存入result数组中。 
+		 */
 		int i = la, j = lb, k = 0;
 		while (dp[i][j] != 0) {
 			//满足头两个条件证明文本不同
@@ -1043,51 +1045,52 @@ public class StringUtils {
 			}
 		}
 		System.out.println("similar length is" + dp[la][lb]);
-//		for (int t = k - 1; t >= 0; t--)
-//			System.out.print(listTitles1[apath[t]].info_name + ",");
-//		
-//		System.out.println();
-//		for (int t = k - 1; t >= 0; t--)
-//			System.out.print(listTitles2[bpath[t]].info_name + ",");
-//		过滤文本内容中的特殊字符
-//		for (int t = k - 1; t >= 0; t--)
-//		{
-//			String str1 = "";
-//			String str2 = "";
-//			if (listTitles1[apath[t]].content != null)
-//				str1 = listTitles1[apath[t]].content
-//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
-//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
-//			if (listTitles2[bpath[t]].content != null)
-//				str2 = listTitles2[bpath[t]].content
-//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
-//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
-//			if (str1.trim().equals(str2.trim())) {
-//				listTitles1[apath[t]].isSimilar = 1;
-//			}
-//		}
-		return 1.0*dp[la][lb]*2/(a.length()+b.length());
+		//		for (int t = k - 1; t >= 0; t--)
+		//			System.out.print(listTitles1[apath[t]].info_name + ",");
+		//		
+		//		System.out.println();
+		//		for (int t = k - 1; t >= 0; t--)
+		//			System.out.print(listTitles2[bpath[t]].info_name + ",");
+		//		过滤文本内容中的特殊字符
+		//		for (int t = k - 1; t >= 0; t--)
+		//		{
+		//			String str1 = "";
+		//			String str2 = "";
+		//			if (listTitles1[apath[t]].content != null)
+		//				str1 = listTitles1[apath[t]].content
+		//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
+		//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
+		//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
+		//			if (listTitles2[bpath[t]].content != null)
+		//				str2 = listTitles2[bpath[t]].content
+		//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
+		//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
+		//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
+		//			if (str1.trim().equals(str2.trim())) {
+		//				listTitles1[apath[t]].isSimilar = 1;
+		//			}
+		//		}
+		return 1.0 * dp[la][lb] * 2 / (a.length() + b.length());
 	}
-//	public static void main(String[] args) {
-//		String content= "adsfa,a s d f:aasdf?,a;,ds ：asdf a,asf d\r\nasdf?asdf";
-//List<String> split = split(content);
-//for (String string : split) {
-//	System.out.println(string);
-//}
-//	}
+
+	//	public static void main(String[] args) {
+	//		String content= "adsfa,a s d f:aasdf?,a;,ds ：asdf a,asf d\r\nasdf?asdf";
+	//List<String> split = split(content);
+	//for (String string : split) {
+	//	System.out.println(string);
+	//}
+	//	}
 	/**
 	 * 去掉文件名后缀
 	 * @param title
 	 * @return
 	 */
 	public static String moveSuffix(String title) {
-		if(title == null){
+		if (title == null) {
 			return "";
 		}
 		int lastIndexOf = title.lastIndexOf(".");
-		if(lastIndexOf<0)
+		if (lastIndexOf < 0)
 			return title;
 		return title.substring(0, lastIndexOf);
 	}

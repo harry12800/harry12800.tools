@@ -64,9 +64,9 @@ public class JarTool {
 				// logger.info("正在压缩文件从 "+newSource+"    到 "+newBase);
 				compressJarFolder(jos, newFile, newBase);
 
-			}// for
+			} // for
 
-		}// if
+		} // if
 	}
 
 	// 压缩单个文件

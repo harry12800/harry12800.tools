@@ -11,37 +11,37 @@ import java.util.regex.Pattern;
  * @param <T>
  */
 public class Page<T> {
-	
+
 	protected int pageNo = 1; // 当前页码
 	protected int pageSize = 0; // 页面大小，设置为“-1”表示不进行分页（分页无效）
-	
+
 	protected long count;// 总记录数，设置为“-1”表示不查询总数
-	
+
 	protected int first;// 首页索引
 	protected int last;// 尾页索引
 	protected int prev;// 上一页索引
 	protected int next;// 下一页索引
-	
+
 	private boolean firstPage;//是否是第一页
 	private boolean lastPage;//是否是最后一页
 
 	protected int length = 8;// 显示页面长度
 	protected int slider = 1;// 前后显示页面长度
-	
+
 	private List<T> list = new ArrayList<T>();
-	
+
 	private String orderBy = ""; // 标准查询有效， 实例： updatedate desc, name asc
 
 	protected String funcName = "page"; // 设置点击页码调用的js函数名称，默认为page，在一页有多个分页对象时使用。
-	
+
 	protected String funcParam = ""; // 函数的附加参数，第三个参数值。
-	
+
 	private String message = ""; // 设置提示消息，显示在“共n条”之后
 
 	public Page() {
 		this.pageSize = -1;
 	}
-	
+
 	/**
 	 * 构造方法
 	 * @param pageNo 当前页码
@@ -50,7 +50,7 @@ public class Page<T> {
 	public Page(int pageNo, int pageSize) {
 		this(pageNo, pageSize, 0);
 	}
-	
+
 	/**
 	 * 构造方法
 	 * @param pageNo 当前页码
@@ -60,7 +60,7 @@ public class Page<T> {
 	public Page(int pageNo, int pageSize, long count) {
 		this(pageNo, pageSize, count, new ArrayList<T>());
 	}
-	
+
 	/**
 	 * 构造方法
 	 * @param pageNo 当前页码
@@ -74,7 +74,7 @@ public class Page<T> {
 		this.pageSize = pageSize;
 		this.list = list;
 	}
-	
+
 	/**
 	 * 获取message
 	 *	@return the message
@@ -86,13 +86,13 @@ public class Page<T> {
 	/**
 	 * 初始化参数
 	 */
-	public void initialize(){
-				
+	public void initialize() {
+
 		//1
 		this.first = 1;
-		
-		this.last = (int)(count / (this.pageSize < 1 ? 20 : this.pageSize) + first - 1);
-		
+
+		this.last = (int) (count / (this.pageSize < 1 ? 20 : this.pageSize) + first - 1);
+
 		if (this.count % this.pageSize != 0 || this.last == 0) {
 			this.last++;
 		}
@@ -100,15 +100,15 @@ public class Page<T> {
 		if (this.last < this.first) {
 			this.last = this.first;
 		}
-		
+
 		if (this.pageNo <= 1) {
 			this.pageNo = this.first;
-			this.firstPage=true;
+			this.firstPage = true;
 		}
 
 		if (this.pageNo >= this.last) {
 			this.pageNo = this.last;
-			this.lastPage=true;
+			this.lastPage = true;
 		}
 
 		if (this.pageNo < this.last - 1) {
@@ -122,7 +122,7 @@ public class Page<T> {
 		} else {
 			this.prev = this.first;
 		}
-		
+
 		//2
 		if (this.pageNo < this.first) {// 如果当前页小于首页
 			this.pageNo = this.first;
@@ -131,9 +131,9 @@ public class Page<T> {
 		if (this.pageNo > this.last) {// 如果当前页大于尾页
 			this.pageNo = this.last;
 		}
-		
+
 	}
-	
+
 	/**
 	 * 默认输出当前分页标签 
 	 * <div class="page">${page}</div>
@@ -143,51 +143,50 @@ public class Page<T> {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("<div class=\"fixed-table-pagination\" style=\"display: block;\">");
-//		sb.append("<div class=\"dataTables_info\">");
-//		sb.append("<li class=\"disabled controls\"><a href=\"javascript:\">当前 ");
-//		sb.append("<input type=\"text\" value=\""+pageNo+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
-//		sb.append(funcName+"(this.value,"+pageSize+",'"+funcParam+"');\" onclick=\"this.select();\"/> / ");
-//		sb.append("<input type=\"text\" value=\""+pageSize+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
-//		sb.append(funcName+"("+pageNo+",this.value,'"+funcParam+"');\" onclick=\"this.select();\"/> 条，");
-//		sb.append("共 " + count + " 条"+(message!=null?message:"")+"</a></li>\n");
-//		sb.append("</div>");
-		long startIndex = (pageNo-1)*pageSize + 1;
-		long endIndex = pageNo*pageSize <=count? pageNo*pageSize:count;
-		
+		//		sb.append("<div class=\"dataTables_info\">");
+		//		sb.append("<li class=\"disabled controls\"><a href=\"javascript:\">当前 ");
+		//		sb.append("<input type=\"text\" value=\""+pageNo+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
+		//		sb.append(funcName+"(this.value,"+pageSize+",'"+funcParam+"');\" onclick=\"this.select();\"/> / ");
+		//		sb.append("<input type=\"text\" value=\""+pageSize+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
+		//		sb.append(funcName+"("+pageNo+",this.value,'"+funcParam+"');\" onclick=\"this.select();\"/> 条，");
+		//		sb.append("共 " + count + " 条"+(message!=null?message:"")+"</a></li>\n");
+		//		sb.append("</div>");
+		long startIndex = (pageNo - 1) * pageSize + 1;
+		long endIndex = pageNo * pageSize <= count ? pageNo * pageSize : count;
+
 		sb.append("<div class=\"pull-left pagination-detail\">");
-		sb.append("<span class=\"pagination-info\">显示第 "+startIndex+" 到第 "+ endIndex +" 条记录，总共 "+count+" 条记录</span>");
+		sb.append("<span class=\"pagination-info\">显示第 " + startIndex + " 到第 " + endIndex + " 条记录，总共 " + count + " 条记录</span>");
 		sb.append("<span class=\"page-list\">每页显示 <span class=\"btn-group dropup\">");
 		sb.append("<button type=\"button\" class=\"btn btn-default  btn-outline dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"false\">");
-		sb.append("<span class=\"page-size\">"+pageSize+"</span> <span class=\"caret\"></span>");
+		sb.append("<span class=\"page-size\">" + pageSize + "</span> <span class=\"caret\"></span>");
 		sb.append("</button>");
 		sb.append("<ul class=\"dropdown-menu\" role=\"menu\">");
-		sb.append("<li class=\""+getSelected(pageSize,10)+ "\"><a href=\"javascript:"+funcName+"("+pageNo+",10,'"+funcParam+"');\">10</a></li>");
-		sb.append("<li class=\""+getSelected(pageSize,25)+ "\"><a href=\"javascript:"+funcName+"("+pageNo+",25,'"+funcParam+"');\">25</a></li>");
-		sb.append("<li class=\""+getSelected(pageSize,50)+ "\"><a href=\"javascript:"+funcName+"("+pageNo+",50,'"+funcParam+"');\">50</a></li>");
-		sb.append("<li class=\""+getSelected(pageSize,100)+ "\"><a href=\"javascript:"+funcName+"("+pageNo+",100,'"+funcParam+"');\">100</a></li>");
+		sb.append("<li class=\"" + getSelected(pageSize, 10) + "\"><a href=\"javascript:" + funcName + "(" + pageNo + ",10,'" + funcParam + "');\">10</a></li>");
+		sb.append("<li class=\"" + getSelected(pageSize, 25) + "\"><a href=\"javascript:" + funcName + "(" + pageNo + ",25,'" + funcParam + "');\">25</a></li>");
+		sb.append("<li class=\"" + getSelected(pageSize, 50) + "\"><a href=\"javascript:" + funcName + "(" + pageNo + ",50,'" + funcParam + "');\">50</a></li>");
+		sb.append("<li class=\"" + getSelected(pageSize, 100) + "\"><a href=\"javascript:" + funcName + "(" + pageNo + ",100,'" + funcParam + "');\">100</a></li>");
 		sb.append("</ul>");
 		sb.append("</span> 条记录</span>");
 		sb.append("</div>");
-//		sb.append("<p>每页 <select onChange=\""+funcName+"("+pageNo+",this.value,'"+funcParam+"');\"" +"style=\"display:display  !important;\" class=\"form-control m-b input-sm\">" +
-//		        "<option value=\"10\" "+getSelected(pageSize,10)+ ">10</option>" +
-//				"<option value=\"25\" "+getSelected(pageSize,25)+ ">25</option>" +
-//				"<option value=\"50\" "+getSelected(pageSize,50)+ ">50</option>" +
-//				"<option value=\"100\" "+getSelected(pageSize,100)+ ">100</option>" +
-//				"</select> 条记录，显示 " +startIndex+ " 到 "+ endIndex +" 条，共 "+count+" 条</p>");
-//		sb.append("</div>");
-//		sb.append("</div>");
-		
-		
-		
-		
+		//		sb.append("<p>每页 <select onChange=\""+funcName+"("+pageNo+",this.value,'"+funcParam+"');\"" +"style=\"display:display  !important;\" class=\"form-control m-b input-sm\">" +
+		//		        "<option value=\"10\" "+getSelected(pageSize,10)+ ">10</option>" +
+		//				"<option value=\"25\" "+getSelected(pageSize,25)+ ">25</option>" +
+		//				"<option value=\"50\" "+getSelected(pageSize,50)+ ">50</option>" +
+		//				"<option value=\"100\" "+getSelected(pageSize,100)+ ">100</option>" +
+		//				"</select> 条记录，显示 " +startIndex+ " 到 "+ endIndex +" 条，共 "+count+" 条</p>");
+		//		sb.append("</div>");
+		//		sb.append("</div>");
+
 		sb.append("<div class=\"pull-right pagination-roll\">");
 		sb.append("<ul class=\"pagination pagination-outline\">");
 		if (pageNo == first) {// 如果是首页
 			sb.append("<li class=\"paginate_button previous disabled\"><a href=\"javascript:\"><i class=\"fa fa-angle-double-left\"></i></a></li>\n");
 			sb.append("<li class=\"paginate_button previous disabled\"><a href=\"javascript:\"><i class=\"fa fa-angle-left\"></i></a></li>\n");
 		} else {
-			sb.append("<li class=\"paginate_button previous\"><a href=\"javascript:\" onclick=\""+funcName+"("+first+","+pageSize+",'"+funcParam+"');\"><i class=\"fa fa-angle-double-left\"></i></a></li>\n");
-			sb.append("<li class=\"paginate_button previous\"><a href=\"javascript:\" onclick=\""+funcName+"("+prev+","+pageSize+",'"+funcParam+"');\"><i class=\"fa fa-angle-left\"></i></a></li>\n");
+			sb.append("<li class=\"paginate_button previous\"><a href=\"javascript:\" onclick=\"" + funcName + "(" + first + "," + pageSize + ",'" + funcParam
+					+ "');\"><i class=\"fa fa-angle-double-left\"></i></a></li>\n");
+			sb.append("<li class=\"paginate_button previous\"><a href=\"javascript:\" onclick=\"" + funcName + "(" + prev + "," + pageSize + ",'" + funcParam
+					+ "');\"><i class=\"fa fa-angle-left\"></i></a></li>\n");
 		}
 
 		int begin = pageNo - (length / 2);
@@ -209,7 +208,7 @@ public class Page<T> {
 		if (begin > first) {
 			int i = 0;
 			for (i = first; i < first + slider && i < begin; i++) {
-				sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+				sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\"" + funcName + "(" + i + "," + pageSize + ",'" + funcParam + "');\">"
 						+ (i + 1 - first) + "</a></li>\n");
 			}
 			if (i < begin) {
@@ -222,7 +221,7 @@ public class Page<T> {
 				sb.append("<li class=\"paginate_button active\"><a href=\"javascript:\">" + (i + 1 - first)
 						+ "</a></li>\n");
 			} else {
-				sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+				sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\"" + funcName + "(" + i + "," + pageSize + ",'" + funcParam + "');\">"
 						+ (i + 1 - first) + "</a></li>\n");
 			}
 		}
@@ -233,7 +232,7 @@ public class Page<T> {
 		}
 
 		for (int i = end + 1; i <= last; i++) {
-			sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+			sb.append("<li class=\"paginate_button \"><a href=\"javascript:\" onclick=\"" + funcName + "(" + i + "," + pageSize + ",'" + funcParam + "');\">"
 					+ (i + 1 - first) + "</a></li>\n");
 		}
 
@@ -241,50 +240,50 @@ public class Page<T> {
 			sb.append("<li class=\"paginate_button next disabled\"><a href=\"javascript:\"><i class=\"fa fa-angle-right\"></i></a></li>\n");
 			sb.append("<li class=\"paginate_button next disabled\"><a href=\"javascript:\"><i class=\"fa fa-angle-double-right\"></i></a></li>\n");
 		} else {
-			sb.append("<li class=\"paginate_button next\"><a href=\"javascript:\" onclick=\""+funcName+"("+next+","+pageSize+",'"+funcParam+"');\">"
+			sb.append("<li class=\"paginate_button next\"><a href=\"javascript:\" onclick=\"" + funcName + "(" + next + "," + pageSize + ",'" + funcParam + "');\">"
 					+ "<i class=\"fa fa-angle-right\"></i></a></li>\n");
-			sb.append("<li class=\"paginate_button next\"><a href=\"javascript:\" onclick=\""+funcName+"("+last+","+pageSize+",'"+funcParam+"');\">"
+			sb.append("<li class=\"paginate_button next\"><a href=\"javascript:\" onclick=\"" + funcName + "(" + last + "," + pageSize + ",'" + funcParam + "');\">"
 					+ "<i class=\"fa fa-angle-double-right\"></i></a></li>\n");
 		}
 
-		
-        sb.append("</ul>");
-        sb.append("</div>");
-        sb.append("</div>");
-//		sb.insert(0,"<ul>\n").append("</ul>\n");
-		
-//		sb.append("<div style=\"clear:both;\"></div>");
+		sb.append("</ul>");
+		sb.append("</div>");
+		sb.append("</div>");
+		//		sb.insert(0,"<ul>\n").append("</ul>\n");
 
-//		sb.insert(0,"<div class=\"page\">\n").append("</div>\n");
-		
+		//		sb.append("<div style=\"clear:both;\"></div>");
+
+		//		sb.insert(0,"<div class=\"page\">\n").append("</div>\n");
+
 		return sb.toString();
 	}
-	
-	protected String getSelected(int pageNo, int selectedPageNo){
-		if(pageNo == selectedPageNo){
+
+	protected String getSelected(int pageNo, int selectedPageNo) {
+		if (pageNo == selectedPageNo) {
 			//return "selected";
 			return "active";
-		}else{
+		} else {
 			return "";
 		}
-		
+
 	}
+
 	/**
 	 * 获取分页HTML代码
 	 * @return
 	 */
-	public String getHtml(){
+	public String getHtml() {
 		return toString();
 	}
-	
-//	public static void main(String[] args) {
-//		Page<String> p = new Page<String>(3, 3);
-//		System.out.println(p);
-//		System.out.println("首页："+p.getFirst());
-//		System.out.println("尾页："+p.getLast());
-//		System.out.println("上页："+p.getPrev());
-//		System.out.println("下页："+p.getNext());
-//	}
+
+	//	public static void main(String[] args) {
+	//		Page<String> p = new Page<String>(3, 3);
+	//		System.out.println(p);
+	//		System.out.println("首页："+p.getFirst());
+	//		System.out.println("尾页："+p.getLast());
+	//		System.out.println("上页："+p.getPrev());
+	//		System.out.println("下页："+p.getNext());
+	//	}
 
 	/**
 	 * 获取设置总数
@@ -300,11 +299,11 @@ public class Page<T> {
 	 */
 	public void setCount(long count) {
 		this.count = count;
-		if (pageSize >= count){
+		if (pageSize >= count) {
 			pageNo = 1;
 		}
 	}
-	
+
 	/**
 	 * 获取当前页码
 	 * @return
@@ -312,7 +311,7 @@ public class Page<T> {
 	public int getPageNo() {
 		return pageNo;
 	}
-	
+
 	/**
 	 * 设置当前页码
 	 * @param pageNo
@@ -320,7 +319,7 @@ public class Page<T> {
 	public void setPageNo(int pageNo) {
 		this.pageNo = pageNo;
 	}
-	
+
 	/**
 	 * 获取页面大小
 	 * @return
@@ -352,7 +351,7 @@ public class Page<T> {
 	public int getLast() {
 		return last;
 	}
-	
+
 	/**
 	 * 获取页面总数
 	 * @return getLast();
@@ -376,7 +375,7 @@ public class Page<T> {
 	public boolean isLastPage() {
 		return lastPage;
 	}
-	
+
 	/**
 	 * 上一页索引值
 	 * @return
@@ -400,7 +399,7 @@ public class Page<T> {
 			return pageNo + 1;
 		}
 	}
-	
+
 	/**
 	 * 获取本页数据对象列表
 	 * @return List<T>
@@ -426,7 +425,7 @@ public class Page<T> {
 	public String getOrderBy() {
 		// SQL过滤，防止注入 
 		String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
-					+ "(\\b(select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
+				+ "(\\b(select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
 		Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 		if (sqlPattern.matcher(orderBy).find()) {
 			return "";
@@ -481,70 +480,71 @@ public class Page<T> {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 	/**
 	 * 分页是否有效
 	 * @return this.pageSize==-1
 	 */
 	public boolean isDisabled() {
-		return this.pageSize==-1;
+		return this.pageSize == -1;
 	}
-	
+
 	/**
 	 * 是否进行总数统计
 	 * @return this.count==-1
 	 */
 	public boolean isNotCount() {
-		return this.count==-1;
+		return this.count == -1;
 	}
-	
+
 	/**
 	 * 获取 Hibernate FirstResult
 	 */
-	public int getFirstResult(){
+	public int getFirstResult() {
 		int firstResult = (getPageNo() - 1) * getPageSize();
 		if (firstResult >= getCount()) {
 			firstResult = 0;
 		}
 		return firstResult;
 	}
+
 	/**
 	 * 获取 Hibernate MaxResults
 	 */
-	public int getMaxResults(){
+	public int getMaxResults() {
 		return getPageSize();
 	}
 
-//	/**
-//	 * 获取 Spring data JPA 分页对象
-//	 */
-//	public Pageable getSpringPage(){
-//		List<Order> orders = new ArrayList<Order>();
-//		if (orderBy!=null){
-//			for (String order : StringUtils.split(orderBy, ",")){
-//				String[] o = StringUtils.split(order, " ");
-//				if (o.length==1){
-//					orders.add(new Order(Direction.ASC, o[0]));
-//				}else if (o.length==2){
-//					if ("DESC".equals(o[1].toUpperCase())){
-//						orders.add(new Order(Direction.DESC, o[0]));
-//					}else{
-//						orders.add(new Order(Direction.ASC, o[0]));
-//					}
-//				}
-//			}
-//		}
-//		return new PageRequest(this.pageNo - 1, this.pageSize, new Sort(orders));
-//	}
-//	
-//	/**
-//	 * 设置 Spring data JPA 分页对象，转换为本系统分页对象
-//	 */
-//	public void setSpringPage(org.springframework.data.domain.Page<T> page){
-//		this.pageNo = page.getNumber();
-//		this.pageSize = page.getSize();
-//		this.count = page.getTotalElements();
-//		this.list = page.getContent();
-//	}
-	
+	//	/**
+	//	 * 获取 Spring data JPA 分页对象
+	//	 */
+	//	public Pageable getSpringPage(){
+	//		List<Order> orders = new ArrayList<Order>();
+	//		if (orderBy!=null){
+	//			for (String order : StringUtils.split(orderBy, ",")){
+	//				String[] o = StringUtils.split(order, " ");
+	//				if (o.length==1){
+	//					orders.add(new Order(Direction.ASC, o[0]));
+	//				}else if (o.length==2){
+	//					if ("DESC".equals(o[1].toUpperCase())){
+	//						orders.add(new Order(Direction.DESC, o[0]));
+	//					}else{
+	//						orders.add(new Order(Direction.ASC, o[0]));
+	//					}
+	//				}
+	//			}
+	//		}
+	//		return new PageRequest(this.pageNo - 1, this.pageSize, new Sort(orders));
+	//	}
+	//	
+	//	/**
+	//	 * 设置 Spring data JPA 分页对象，转换为本系统分页对象
+	//	 */
+	//	public void setSpringPage(org.springframework.data.domain.Page<T> page){
+	//		this.pageNo = page.getNumber();
+	//		this.pageSize = page.getSize();
+	//		this.count = page.getTotalElements();
+	//		this.list = page.getContent();
+	//	}
+
 }

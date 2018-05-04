@@ -27,7 +27,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 public class XmlUtils {
 
 	/**
@@ -39,33 +38,34 @@ public class XmlUtils {
 	 * @return
 	 * @throws DocumentException
 	 */
-	 public static String getNodeAttrValue(String xmlPath,String xpath,String attrName) throws Exception{
-		 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
-			DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
-			File file = new File(xmlPath); // 打开文件，获得句柄
-			Document doc = db.parse(file); // 使用dom解析xml文件
-			XPathFactory pathFactory = XPathFactory.newInstance();
-			// 使用XPathFactory工厂创建 XPath 对象
-			XPath xpathTool = pathFactory.newXPath();
-			// 使用XPath对象编译XPath表达式
-			XPathExpression pathExpression = xpathTool.compile(xpath);
-			// 计算 XPath 表达式得到结果
-			Object result = pathExpression.evaluate(doc, XPathConstants.NODESET);
-			// 节点集node-set转化为NodeList
-			// 将结果强制转化成 DOM NodeList
-			org.w3c.dom.NodeList nodes = (NodeList) result;
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node item = nodes.item(i);
-				System.out.println(i);
-				NamedNodeMap attributes = item.getAttributes();
-				for (int j = 0; j < attributes.getLength(); j++) {
-					 if(attrName.equals(attributes.item(j).getNodeName())){
-						 return attributes.item(j).getNodeValue();
-					 }
+	public static String getNodeAttrValue(String xmlPath, String xpath, String attrName) throws Exception {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
+		DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
+		File file = new File(xmlPath); // 打开文件，获得句柄
+		Document doc = db.parse(file); // 使用dom解析xml文件
+		XPathFactory pathFactory = XPathFactory.newInstance();
+		// 使用XPathFactory工厂创建 XPath 对象
+		XPath xpathTool = pathFactory.newXPath();
+		// 使用XPath对象编译XPath表达式
+		XPathExpression pathExpression = xpathTool.compile(xpath);
+		// 计算 XPath 表达式得到结果
+		Object result = pathExpression.evaluate(doc, XPathConstants.NODESET);
+		// 节点集node-set转化为NodeList
+		// 将结果强制转化成 DOM NodeList
+		org.w3c.dom.NodeList nodes = (NodeList) result;
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node item = nodes.item(i);
+			System.out.println(i);
+			NamedNodeMap attributes = item.getAttributes();
+			for (int j = 0; j < attributes.getLength(); j++) {
+				if (attrName.equals(attributes.item(j).getNodeName())) {
+					return attributes.item(j).getNodeValue();
 				}
 			}
-			return null;
-	 }
+		}
+		return null;
+	}
+
 	/**
 	 * 获取节点上的属性值
 	 * 
@@ -97,14 +97,15 @@ public class XmlUtils {
 			System.out.println(i);
 			NamedNodeMap attributes = item.getAttributes();
 			for (int j = 0; j < attributes.getLength(); j++) {
-				 if(attrName.equals(attributes.item(j).getNodeName())){
-					 System.out.println(attributes.item(j).getNodeValue());
-					 arrayList.add( attributes.item(j).getNodeValue());
-				 }
+				if (attrName.equals(attributes.item(j).getNodeName())) {
+					System.out.println(attributes.item(j).getNodeValue());
+					arrayList.add(attributes.item(j).getNodeValue());
+				}
 			}
 		}
 		return arrayList;
 	}
+
 	/**
 	 * 获取节点上的属性值
 	 * 
@@ -135,14 +136,15 @@ public class XmlUtils {
 			System.out.println(i);
 			NamedNodeMap attributes = item.getAttributes();
 			for (int j = 0; j < attributes.getLength(); j++) {
-				 if(attrName.equals(attributes.item(j).getNodeName())){
-					 System.out.println(attributes.item(j).getNodeValue());
-					 arrayList.add( attributes.item(j).getNodeValue());
-				 }
+				if (attrName.equals(attributes.item(j).getNodeName())) {
+					System.out.println(attributes.item(j).getNodeValue());
+					arrayList.add(attributes.item(j).getNodeValue());
+				}
 			}
 		}
 		return arrayList;
 	}
+
 	/**
 	 * 获取节点上的属性值
 	 * 
@@ -152,96 +154,94 @@ public class XmlUtils {
 	 * @return
 	 * @throws DocumentException
 	 */
-	 public static String getNodeAttrValue(InputStream in,String xpath,String attrName) throws Exception{
-		 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
-			DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
-			Document doc = db.parse(in); // 使用dom解析xml文件
-			XPathFactory pathFactory = XPathFactory.newInstance();
-			// 使用XPathFactory工厂创建 XPath 对象
-			XPath xpathTool = pathFactory.newXPath();
-			// 使用XPath对象编译XPath表达式
-			XPathExpression pathExpression = xpathTool.compile(xpath);
-			// 计算 XPath 表达式得到结果
-			Object result = pathExpression.evaluate(doc, XPathConstants.NODESET);
-			// 节点集node-set转化为NodeList
-			// 将结果强制转化成 DOM NodeList
-			org.w3c.dom.NodeList nodes = (NodeList) result;
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node item = nodes.item(i);
-				System.out.println(i);
-				NamedNodeMap attributes = item.getAttributes();
-				for (int j = 0; j < attributes.getLength(); j++) {
-					 if(attrName.equals(attributes.item(j).getNodeName())){
-						 return attributes.item(j).getNodeValue();
-					 }
+	public static String getNodeAttrValue(InputStream in, String xpath, String attrName) throws Exception {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
+		DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
+		Document doc = db.parse(in); // 使用dom解析xml文件
+		XPathFactory pathFactory = XPathFactory.newInstance();
+		// 使用XPathFactory工厂创建 XPath 对象
+		XPath xpathTool = pathFactory.newXPath();
+		// 使用XPath对象编译XPath表达式
+		XPathExpression pathExpression = xpathTool.compile(xpath);
+		// 计算 XPath 表达式得到结果
+		Object result = pathExpression.evaluate(doc, XPathConstants.NODESET);
+		// 节点集node-set转化为NodeList
+		// 将结果强制转化成 DOM NodeList
+		org.w3c.dom.NodeList nodes = (NodeList) result;
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node item = nodes.item(i);
+			System.out.println(i);
+			NamedNodeMap attributes = item.getAttributes();
+			for (int j = 0; j < attributes.getLength(); j++) {
+				if (attrName.equals(attributes.item(j).getNodeName())) {
+					return attributes.item(j).getNodeValue();
 				}
 			}
-			return null;
-	 }
- 
-	 /**
-	  * 
-	  * @param in
-	  * @param nodeName
-	  * @return
-	  * @throws Exception
-	  */
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param in
+	 * @param nodeName
+	 * @return
+	 * @throws Exception
+	 */
 	public static String getNodeValueByName(InputStream in, String nodeName)
 			throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
 		DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
 		Document doc = db.parse(in); // 使用dom解析xml文件
 		NodeList elements = doc.getElementsByTagName(nodeName);
-		if (elements == null || elements.getLength() == 0)
-		{
-//			System.out.println("没有节点");
+		if (elements == null || elements.getLength() == 0) {
+			//			System.out.println("没有节点");
 			return null;
-		}
-		else {
+		} else {
 			return elements.item(0).getTextContent().trim();
 		}
 	}
+
 	public static void main(String[] args) throws Exception {
 		XmlUtils.getNodeAttrValues("E:/Workspaces/harry12800.tools/.classPath",
 				"//classpathentry[@kind='src']", "path");
 	}
-	
+
 	public static void main1(String[] args) throws Exception {
-//		InputStream is = Thread.currentThread().getContextClassLoader()
-//				.getResourceAsStream("template/gen/curd/dao/entity.xml");
-//		Document doc = DocumentBuilderFactory.newInstance()
-//				.newDocumentBuilder().parse(is);
-//		NodeList childNodes = doc.getFirstChild().getChildNodes();
-//		int length = childNodes.getLength();
-		 
-//		String soap = null;
-//		Reader rr=new StringReader(soap); 
-//		DocumentBuilderFactory builderFactory=DocumentBuilderFactory.newInstance(); 
-//		DocumentBuilder domBuilder=builderFactory.newDocumentBuilder(); 
-//		Document document=domBuilder.parse(new InputSource(rr)); 
+		//		InputStream is = Thread.currentThread().getContextClassLoader()
+		//				.getResourceAsStream("template/gen/curd/dao/entity.xml");
+		//		Document doc = DocumentBuilderFactory.newInstance()
+		//				.newDocumentBuilder().parse(is);
+		//		NodeList childNodes = doc.getFirstChild().getChildNodes();
+		//		int length = childNodes.getLength();
+
+		//		String soap = null;
+		//		Reader rr=new StringReader(soap); 
+		//		DocumentBuilderFactory builderFactory=DocumentBuilderFactory.newInstance(); 
+		//		DocumentBuilder domBuilder=builderFactory.newDocumentBuilder(); 
+		//		Document document=domBuilder.parse(new InputSource(rr)); 
 	}
+
 	public static String getAttrValueByName(InputStream in,
 			String tagName, String attrName) throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); // 获取一个DocumentBuilderFactory的实例
 		DocumentBuilder db = dbf.newDocumentBuilder(); // 使用工厂生成一个DocumentBuilder
 		Document doc = db.parse(in); // 使用dom解析xml文件
 		NodeList elements = doc.getElementsByTagName(tagName);
-		if (elements == null || elements.getLength() == 0)
-		{
-//			System.out.println("没有节点");
+		if (elements == null || elements.getLength() == 0) {
+			//			System.out.println("没有节点");
+			return null;
+		} else {
+			Node item = elements.item(0);
+			NamedNodeMap attributes = item.getAttributes();
+			if (attributes != null && attributes.getLength() > 0) {
+				Node attr = attributes.getNamedItem(attrName);
+				return attr.getNodeValue();
+			}
 			return null;
 		}
-		else {
-			  Node item = elements.item(0);
-			  NamedNodeMap attributes = item.getAttributes();
-			  if( attributes!=null&&attributes.getLength()>0 )
-              {
-                  Node attr=attributes.getNamedItem(attrName);
-                  return attr.getNodeValue();
-              }
-			  return null;
-		}
 	}
+
 	/**
 	 * 将对象直接转换成String类型的 XML输出
 	 * 
@@ -300,7 +300,7 @@ public class XmlUtils {
 	/**
 	 * 将String类型的xml转换成对象
 	 */
-	public static Object convertXmlStrToObject(Class<?> clazz, String xmlStr)  {
+	public static Object convertXmlStrToObject(Class<?> clazz, String xmlStr) {
 		Object xmlObject = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance(clazz);
@@ -332,6 +332,6 @@ public class XmlUtils {
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-		return (A)xmlObject;
+		return (A) xmlObject;
 	}
 }

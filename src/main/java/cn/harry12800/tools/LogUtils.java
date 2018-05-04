@@ -24,7 +24,7 @@ public class LogUtils {
 	public static void print(Object o) throws Exception {
 		try {
 			printStream = new PrintStream(new FileOutputStream(new File(
-			"d:\\cache.log"), true));
+					"d:\\cache.log"), true));
 			// set output to file instead of console
 			System.setOut(printStream);
 			System.setErr(printStream);

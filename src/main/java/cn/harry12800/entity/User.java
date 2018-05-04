@@ -1,6 +1,7 @@
 package cn.harry12800.entity;
 
 import java.util.Date;
+
 /**
  * 用户Entity
  * @author jeeplus
@@ -9,38 +10,36 @@ import java.util.Date;
 public class User extends DataEntity<User> {
 
 	private static final long serialVersionUID = 1L;
-	private Office company;	// 归属公司
-	private Office office;	// 归属部门
+	private Office company; // 归属公司
+	private Office office; // 归属部门
 	private String loginName;// 登录名
 	private String password;// 密码
-	private String no;		// 工号
-	private String name;	// 姓名
-	private String email;	// 邮箱
-	private String phone;	// 电话
-	private String mobile;	// 手机
+	private String no; // 工号
+	private String name; // 姓名
+	private String email; // 邮箱
+	private String phone; // 电话
+	private String mobile; // 手机
 	private String userType;// 用户类型
-	private String loginIp;	// 最后登陆IP
-	private Date loginDate;	// 最后登陆日期
-	private String loginFlag;	// 是否允许登陆
-	private String photo;	// 头像
-	private String qrCode;	//二维码
+	private String loginIp; // 最后登陆IP
+	private Date loginDate; // 最后登陆日期
+	private String loginFlag; // 是否允许登陆
+	private String photo; // 头像
+	private String qrCode; //二维码
 	private String oldLoginName;// 原登录名
-	private String newPassword;	// 新密码
-	
-	private String oldLoginIp;	// 上次登陆IP
-	private Date oldLoginDate;	// 上次登陆日期
-	
+	private String newPassword; // 新密码
 
-	public User(String id){
+	private String oldLoginIp; // 上次登陆IP
+	private Date oldLoginDate; // 上次登陆日期
+
+	public User(String id) {
 		super(id);
 	}
 
-	public User(String id, String loginName){
+	public User(String id, String loginName) {
 		super(id);
 		this.loginName = loginName;
 	}
 
-	
 	public String getPhoto() {
 		return photo;
 	}
@@ -68,7 +67,7 @@ public class User extends DataEntity<User> {
 	public void setCompany(Office company) {
 		this.company = company;
 	}
-	
+
 	public Office getOffice() {
 		return office;
 	}
@@ -84,6 +83,7 @@ public class User extends DataEntity<User> {
 	public void setLoginName(String loginName) {
 		this.loginName = loginName;
 	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -95,7 +95,7 @@ public class User extends DataEntity<User> {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getNo() {
 		return no;
 	}
@@ -115,7 +115,7 @@ public class User extends DataEntity<User> {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public String getPhone() {
 		return phone;
 	}
@@ -135,7 +135,7 @@ public class User extends DataEntity<User> {
 	public String getRemarks() {
 		return remarks;
 	}
-	
+
 	public String getUserType() {
 		return userType;
 	}
@@ -181,7 +181,7 @@ public class User extends DataEntity<User> {
 	}
 
 	public String getOldLoginIp() {
-		if (oldLoginIp == null){
+		if (oldLoginIp == null) {
 			return loginIp;
 		}
 		return oldLoginIp;
@@ -192,7 +192,7 @@ public class User extends DataEntity<User> {
 	}
 
 	public Date getOldLoginDate() {
-		if (oldLoginDate == null){
+		if (oldLoginDate == null) {
 			return loginDate;
 		}
 		return oldLoginDate;
@@ -201,14 +201,15 @@ public class User extends DataEntity<User> {
 	public void setOldLoginDate(Date oldLoginDate) {
 		this.oldLoginDate = oldLoginDate;
 	}
-	public boolean isAdmin(){
+
+	public boolean isAdmin() {
 		return isAdmin(this.id);
 	}
-	
-	public static boolean isAdmin(String id){
+
+	public static boolean isAdmin(String id) {
 		return id != null && "1".equals(id);
 	}
-	
+
 	@Override
 	public String toString() {
 		return id;

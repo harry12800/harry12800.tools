@@ -57,6 +57,7 @@ public class SQLUtils {
 		}
 		return str;
 	}
+
 	/**
 	 * 
 	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c"
@@ -69,7 +70,8 @@ public class SQLUtils {
 	 * @return
 	 */
 	public static String getSQLInSentence(Set<String> codes, String fieldName) {
-		if(codes == null || codes.isEmpty())return " (1!=1) ";
+		if (codes == null || codes.isEmpty())
+			return " (1!=1) ";
 		StringBuffer str = new StringBuffer(" (" + fieldName + " in (");
 		int i = 0;
 		for (String key : codes) {
@@ -82,8 +84,9 @@ public class SQLUtils {
 		}
 		String ret = str.substring(0, str.length() - 1);
 		ret = ret + ")";
-		return ret+") ";
+		return ret + ") ";
 	}
+
 	/**
 	 * 
 	 * @param codes
@@ -91,7 +94,8 @@ public class SQLUtils {
 	 * @return
 	 */
 	public static String getSQLNotInSentence(Set<String> codes, String fieldName) {
-		if(codes == null || codes.isEmpty()) return " (1=1) ";
+		if (codes == null || codes.isEmpty())
+			return " (1=1) ";
 		StringBuffer str = new StringBuffer(" (" + fieldName + " not in (");
 		int i = 0;
 		for (String key : codes) {
@@ -104,8 +108,9 @@ public class SQLUtils {
 		}
 		String ret = str.substring(0, str.length() - 1);
 		ret = ret + ")";
-		return ret+") ";
+		return ret + ") ";
 	}
+
 	/**
 	 * 
 	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c"
@@ -118,7 +123,8 @@ public class SQLUtils {
 	 * @return
 	 */
 	public static String getSQLInSentence(List<String> codes, String fieldName) {
-		if(codes == null || codes.isEmpty()) return " (1!=1) ";
+		if (codes == null || codes.isEmpty())
+			return " (1!=1) ";
 		StringBuffer str = new StringBuffer(" (" + fieldName + " in (");
 		int i = 0;
 		for (String key : codes) {
@@ -131,33 +137,35 @@ public class SQLUtils {
 		}
 		String ret = str.substring(0, str.length() - 1);
 		ret = ret + ")";
-		return ret+") ";
+		return ret + ") ";
 	}
-	public static String getOraclePageSQL(String sql,int pageSize ,int pageIdex) {
-		String s= "SELECT * FROM   "+
-		"(  "+
-		"SELECT A.*, ROWNUM RN   "+
-		"FROM ("+sql+") A   "+
-		"WHERE ROWNUM <= "+pageSize*pageIdex +
-		")  "+
-		"WHERE RN > "+(pageIdex-1)*pageSize;
+
+	public static String getOraclePageSQL(String sql, int pageSize, int pageIdex) {
+		String s = "SELECT * FROM   " +
+				"(  " +
+				"SELECT A.*, ROWNUM RN   " +
+				"FROM (" + sql + ") A   " +
+				"WHERE ROWNUM <= " + pageSize * pageIdex +
+				")  " +
+				"WHERE RN > " + (pageIdex - 1) * pageSize;
 		return s;
 	}
-	public static String getMysqlPageSQL(String sql,int pageSize ,int pageIdex) {
-		String s=  
-		"SELECT * "+
-		"FROM ("+sql+") A   "+
-		"limit "+(pageIdex-1)*pageSize+","+pageSize;
+
+	public static String getMysqlPageSQL(String sql, int pageSize, int pageIdex) {
+		String s = "SELECT * " +
+				"FROM (" + sql + ") A   " +
+				"limit " + (pageIdex - 1) * pageSize + "," + pageSize;
 		return s;
 	}
+
 	public static void main(String[] args) {
 		String pageSQL = getMysqlPageContent("select * from aa");
 		System.err.println(pageSQL);
 	}
 
 	public static String getMysqlPageContent(String sql) {
-		String s="SELECT count(*)FROM ("+sql+") A";
+		String s = "SELECT count(*)FROM (" + sql + ") A";
 		return s;
 	}
-	
+
 }

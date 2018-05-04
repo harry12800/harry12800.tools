@@ -8,14 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * 对象属性的转化
  * @author BGYJJ440
  *
  */
 public class EntityMent {
-	static public final Map<String,String> db2attrMap = new HashMap<String,String>(0);
+	static public final Map<String, String> db2attrMap = new HashMap<String, String>(0);
 	static {
 		db2attrMap.put("NVARCHAR", "String");
 		db2attrMap.put("NVARCHAR2", "String");
@@ -27,9 +26,7 @@ public class EntityMent {
 		db2attrMap.put("TIMESTAMP", "Date");
 		db2attrMap.put("BLOB", "byte[]");
 	}
-	
-	
-	
+
 	/**
 	 * 将对象属性转化成键值对的list
 	 * @param <T>
@@ -42,56 +39,53 @@ public class EntityMent {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> list2Entity(List<Map<String, Object>> list,Class<?> clazz) throws Exception{
-		List<T> entityList=new ArrayList<T>();
-		for(Map<String, Object>map:list)
-		{
-			Object entity=map2Entity(map,clazz);
+	public static <T> List<T> list2Entity(List<Map<String, Object>> list, Class<?> clazz) throws Exception {
+		List<T> entityList = new ArrayList<T>();
+		for (Map<String, Object> map : list) {
+			Object entity = map2Entity(map, clazz);
 			entityList.add((T) entity);
 		}
 		return entityList;
 	}
-	
-	 /**
-	  *  将对象属性转化成键值对的map
-	  * @param map
-	  * @param clazz
-	  * @return
-	  */
-	public static Object map2Entity(Map<String, Object> map,Class<?> clazz)  {
-	
-	     try {
+
+	/**
+	 *  将对象属性转化成键值对的map
+	 * @param map
+	 * @param clazz
+	 * @return
+	 */
+	public static Object map2Entity(Map<String, Object> map, Class<?> clazz) {
+
+		try {
 			Object object = clazz.newInstance();
-			for(String key:map.keySet()){
-				Object value=map.get(key);
-				key=columnName2EntityAttrName(key);
-				Field field=null;
+			for (String key : map.keySet()) {
+				Object value = map.get(key);
+				key = columnName2EntityAttrName(key);
+				Field field = null;
 				try {
-//				StringUtils.errorln("key:"+key+"\tvalue :"+value+"\t value.type:"+value.getClass());
+					//				StringUtils.errorln("key:"+key+"\tvalue :"+value+"\t value.type:"+value.getClass());
 					field = clazz.getDeclaredField(key);
 					field.setAccessible(true);//暴力访问，取消age的私有权限。让对象可以访问
 					field.set(object, value);
-				
+
 				} catch (Exception e) {
-//					e.printStackTrace();
-					if(value instanceof java.lang.Byte){
-						if((Byte)value==0){
+					//					e.printStackTrace();
+					if (value instanceof java.lang.Byte) {
+						if ((Byte) value == 0) {
 							field.set(object, false);
-						}
-						else{
+						} else {
 							field.set(object, true);
 						}
 					}
 
-					if(value instanceof java.lang.Integer){
-						if((Integer)value==0){
+					if (value instanceof java.lang.Integer) {
+						if ((Integer) value == 0) {
 							field.set(object, false);
-						}
-						else{
+						} else {
 							field.set(object, true);
 						}
 					}
-				
+
 				}
 			}
 			return object;
@@ -104,25 +98,22 @@ public class EntityMent {
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * 类属性名称映射成数据库字段名
 	 * @param clazz
 	 * @return
 	 */
-	public static Map<String,String> entityAttr2TableColumnMap(Class<?> clazz){
+	public static Map<String, String> entityAttr2TableColumnMap(Class<?> clazz) {
 		Field[] fields = clazz.getFields();
-		Map<String, String> map =new HashMap<String, String>();
+		Map<String, String> map = new HashMap<String, String>();
 		for (int i = 0; i < fields.length; i++) {
 			Field field = fields[i];
 			map.put(field.getName(), entityAttrName2ColumnName(field.getName()));
 		}
 		return map;
 	}
-	
-	
-	
+
 	/**
 	 * 数据表字段名转化为对象属性名
 	 * @param columnName
@@ -146,9 +137,11 @@ public class EntityMent {
 				attrName += (char) b;
 			}
 		}
-		if(JavaKeyWord.keywords.contains(attrName))return "_"+attrName;
+		if (JavaKeyWord.keywords.contains(attrName))
+			return "_" + attrName;
 		return attrName;
 	}
+
 	/**
 	 * 数据表名转化为名
 	 * @param tableName
@@ -168,30 +161,31 @@ public class EntityMent {
 					b -= 32;
 					isDown = false;
 				}
-				if(i==0&&b>96&&b<123){
-					b-=32;
+				if (i == 0 && b > 96 && b < 123) {
+					b -= 32;
 				}
 				attrName += (char) b;
 			}
 		}
-		if(JavaKeyWord.keywords.contains(attrName))return "_"+attrName;
+		if (JavaKeyWord.keywords.contains(attrName))
+			return "_" + attrName;
 		return attrName;
 	}
-	
+
 	/**
 	 * 将对象属性转化成键值对的map
 	 * @param entityName
 	 * @return
 	 * @throws Exception
 	 */
-	public static LinkedHashMap<?, ?> entity2Map(Object entity){
+	public static LinkedHashMap<?, ?> entity2Map(Object entity) {
 		try {
-			if(entity instanceof Map){
+			if (entity instanceof Map) {
 				return (LinkedHashMap<?, ?>) entity;
 			}
-			Map<String, Object> map =getProperty(entity);
-			LinkedHashMap<String,Object> mapNew=new LinkedHashMap<String, Object>();
-			for(String key:map.keySet()){
+			Map<String, Object> map = getProperty(entity);
+			LinkedHashMap<String, Object> mapNew = new LinkedHashMap<String, Object>();
+			for (String key : map.keySet()) {
 				Object value = map.get(key);
 				key = entityAttrName2ColumnName(key);
 				mapNew.put(key, value);
@@ -202,7 +196,7 @@ public class EntityMent {
 		}
 		return new LinkedHashMap<String, Object>();
 	}
-	
+
 	/**
 	 * 对象属性名==>数据表字段名
 	 * @param columnName
@@ -210,50 +204,50 @@ public class EntityMent {
 	 */
 	private static String entityAttrName2ColumnName(String key) {
 		byte[] c = key.getBytes();
-		key="";
+		key = "";
 		for (int i = 0; i < c.length; i++) {
 			byte b = c[i];
-			
-			if(b<=90&&b>=65){
-				key+="_"+(char)(b+32);
-			}
-			else{
-				key+=(char)b;
+
+			if (b <= 90 && b >= 65) {
+				key += "_" + (char) (b + 32);
+			} else {
+				key += (char) b;
 			}
 		}
 		return key.toUpperCase();
 	}
-	
-	
+
 	/**
 	 * 获得一个对象各个属性的字节流
 	 */
-	public static void printEntity(Object entityName){
+	public static void printEntity(Object entityName) {
 		try {
 			Class<?> c = entityName.getClass();
 			Field field[] = c.getDeclaredFields();
 			for (Field f : field) {
 				Object value = invokeMethod(entityName, f.getName(), null);
-				StringUtils.errorln(f.getName() + "\t===\t" + value );
+				StringUtils.errorln(f.getName() + "\t===\t" + value);
 			}
 		} catch (SecurityException e) {
 		} catch (Exception e) {
 		}
 	}
+
 	/**
 	 * 获得一个对象各个属性的字节流
 	 */
-	public static Map<String,Object> getProperty(Object entityName) throws Exception {
-		Map<String,Object> map=new HashMap<String, Object>();
+	public static Map<String, Object> getProperty(Object entityName) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
 		Class<?> c = entityName.getClass();
 		Field field[] = c.getDeclaredFields();
 		for (Field f : field) {
 			Object value = invokeMethod(entityName, f.getName(), null);
-//			StringUtils.errorln(f.getName() + "\t" + value + "\t" + f.getType());
+			//			StringUtils.errorln(f.getName() + "\t" + value + "\t" + f.getType());
 			map.put(f.getName(), value);
 		}
 		return map;
 	}
+
 	/**
 	 * 获得对象属性的值
 	 */
@@ -273,43 +267,43 @@ public class EntityMent {
 	}
 
 	public static String getDb2attrMap(String type) {
-		 
-		if(type.equalsIgnoreCase("TIMESTAMP"))
+
+		if (type.equalsIgnoreCase("TIMESTAMP"))
 			return "Date";
-		if(type.equalsIgnoreCase("VARCHAR")){
+		if (type.equalsIgnoreCase("VARCHAR")) {
 			return "String";
 		}
-		if(type.startsWith("VARCHAR")){
+		if (type.startsWith("VARCHAR")) {
 			return "String";
 		}
-		if(type.startsWith("varchar")){
+		if (type.startsWith("varchar")) {
 			return "String";
 		}
-		if(type.equalsIgnoreCase("INT")){
+		if (type.equalsIgnoreCase("INT")) {
 			return "Integer";
 		}
-		if(type.equalsIgnoreCase("NUMBER")){
+		if (type.equalsIgnoreCase("NUMBER")) {
 			return "Double";
 		}
-		if(type.equalsIgnoreCase("CHAR")){
+		if (type.equalsIgnoreCase("CHAR")) {
 			return "String";
 		}
-		if(type.equalsIgnoreCase("LONG")){
+		if (type.equalsIgnoreCase("LONG")) {
 			return "String";
 		}
-		if(type.equalsIgnoreCase("BLOB")){
+		if (type.equalsIgnoreCase("BLOB")) {
 			return "byte[]";
 		}
-		if(type.equalsIgnoreCase("mediumtext")){
+		if (type.equalsIgnoreCase("mediumtext")) {
 			return "String";
 		}
-		if(type.equalsIgnoreCase("text")){
+		if (type.equalsIgnoreCase("text")) {
 			return "String";
 		}
-		if(type.equalsIgnoreCase("tinyint")){
+		if (type.equalsIgnoreCase("tinyint")) {
 			return "Integer";
 		}
-		if(type.equalsIgnoreCase("datetime")){
+		if (type.equalsIgnoreCase("datetime")) {
 			return "java.util.Date";
 		}
 		return type;

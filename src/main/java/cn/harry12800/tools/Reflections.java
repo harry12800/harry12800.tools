@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-  
 
 /**
  * 反射工具类.
@@ -16,9 +15,8 @@ import java.lang.reflect.Type;
  */
 @SuppressWarnings("rawtypes")
 public class Reflections {
-	
+
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
-	
 
 	/**
 	 * 调用Getter方法.
@@ -26,10 +24,10 @@ public class Reflections {
 	 */
 	public static Object invokeGetter(Object obj, String propertyName) {
 		Object object = obj;
-//		for (String name : StringUtils.split(propertyName, ".")){
-//			String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(name);
-//			object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
-//		}
+		//		for (String name : StringUtils.split(propertyName, ".")){
+		//			String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(name);
+		//			object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
+		//		}
 		return object;
 	}
 
@@ -38,17 +36,17 @@ public class Reflections {
 	 * 支持多级，如：对象名.对象名.方法
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
-//		Object object = obj;
-//		String[] names = StringUtils.split(propertyName, ".");
-//		for (int i=0; i<names.length; i++){
-//			if(i<names.length-1){
-//				String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(names[i]);
-//				object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
-//			}else{
-//				String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(names[i]);
-//				invokeMethodByName(object, setterMethodName, new Object[] { value });
-//			}
-//		}
+		//		Object object = obj;
+		//		String[] names = StringUtils.split(propertyName, ".");
+		//		for (int i=0; i<names.length; i++){
+		//			if(i<names.length-1){
+		//				String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(names[i]);
+		//				object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
+		//			}else{
+		//				String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(names[i]);
+		//				invokeMethodByName(object, setterMethodName, new Object[] { value });
+		//			}
+		//		}
 	}
 
 	/**
@@ -65,7 +63,7 @@ public class Reflections {
 		try {
 			result = field.get(obj);
 		} catch (IllegalAccessException e) {
-//			logger.error("不可能抛出的异常{}", e.getMessage());
+			//			logger.error("不可能抛出的异常{}", e.getMessage());
 		}
 		return result;
 	}
@@ -130,8 +128,8 @@ public class Reflections {
 	 * 如向上转型到Object仍无法找到, 返回null.
 	 */
 	public static Field getAccessibleField(final Object obj, final String fieldName) {
-//		Validate.notNull(obj, "object can't be null");
-//		Validate.notBlank(fieldName, "fieldName can't be blank");
+		//		Validate.notNull(obj, "object can't be null");
+		//		Validate.notBlank(fieldName, "fieldName can't be blank");
 		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);
@@ -154,8 +152,8 @@ public class Reflections {
 	 */
 	public static Method getAccessibleMethod(final Object obj, final String methodName,
 			final Class<?>... parameterTypes) {
-//		Validate.notNull(obj, "object can't be null");
-//		Validate.notBlank(methodName, "methodName can't be blank");
+		//		Validate.notNull(obj, "object can't be null");
+		//		Validate.notBlank(methodName, "methodName can't be blank");
 
 		for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
 			try {
@@ -178,8 +176,8 @@ public class Reflections {
 	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
 	 */
 	public static Method getAccessibleMethodByName(final Object obj, final String methodName) {
-//		Validate.notNull(obj, "object can't be null");
-//		Validate.notBlank(methodName, "methodName can't be blank");
+		//		Validate.notNull(obj, "object can't be null");
+		//		Validate.notBlank(methodName, "methodName can't be blank");
 
 		for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType.getSuperclass()) {
 			Method[] methods = searchType.getDeclaredMethods();
@@ -242,27 +240,27 @@ public class Reflections {
 		Type genType = clazz.getGenericSuperclass();
 
 		if (!(genType instanceof ParameterizedType)) {
-//			logger.warn(clazz.getSimpleName() + "'s superclass not ParameterizedType");
+			//			logger.warn(clazz.getSimpleName() + "'s superclass not ParameterizedType");
 			return Object.class;
 		}
 
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 
 		if (index >= params.length || index < 0) {
-//			logger.warn("Index: " + index + ", Size of " + clazz.getSimpleName() + "'s Parameterized Type: "
-//					+ params.length);
+			//			logger.warn("Index: " + index + ", Size of " + clazz.getSimpleName() + "'s Parameterized Type: "
+			//					+ params.length);
 			return Object.class;
 		}
 		if (!(params[index] instanceof Class)) {
-//			logger.warn(clazz.getSimpleName() + " not set the actual class on superclass generic parameter");
+			//			logger.warn(clazz.getSimpleName() + " not set the actual class on superclass generic parameter");
 			return Object.class;
 		}
 
 		return (Class) params[index];
 	}
-	
+
 	public static Class<?> getUserClass(Object instance) {
-//		Assert.notNull(instance, "Instance must not be null");
+		//		Assert.notNull(instance, "Instance must not be null");
 		Class clazz = instance.getClass();
 		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superClass = clazz.getSuperclass();
@@ -273,7 +271,7 @@ public class Reflections {
 		return clazz;
 
 	}
-	
+
 	/**
 	 * 将反射时的checked exception转换为unchecked exception.
 	 */

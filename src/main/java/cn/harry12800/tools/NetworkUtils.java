@@ -64,26 +64,25 @@ public class NetworkUtils {
 		return result;
 	}
 
-
 	/**
 	 * 得到外网Ip
 	 * @return
 	 * @throws Exception 
 	 */
-	public static String getOuterIp() throws Exception{
+	public static String getOuterIp() throws Exception {
 		String str = StringUtils.getHttpContentByUrl("https://ipip.yy.com/get_ip_info.php");
-		Pattern p  = Pattern.compile("(\\d+[.]\\d+[.]\\d+[.]\\d+)");
+		Pattern p = Pattern.compile("(\\d+[.]\\d+[.]\\d+[.]\\d+)");
 		Matcher m = p.matcher(str);
-		if(m.find())
+		if (m.find())
 			return m.group(0);
-		else{
+		else {
 			return "";
 		}
 	}
-	
+
 	public static void main(String[] args) throws Exception {
-	//	 StringUtils.errorln(getOuterIp());
-		 StringUtils.errorln(getMySQLServerIp());
+		//	 StringUtils.errorln(getOuterIp());
+		StringUtils.errorln(getMySQLServerIp());
 	}
 
 	/**
@@ -102,6 +101,7 @@ public class NetworkUtils {
 		}
 		return result;
 	}
+
 	/**
 	 * 获取端口开发的所有局域网IP
 	 * @param port
@@ -118,17 +118,19 @@ public class NetworkUtils {
 		}
 		return result;
 	}
+
 	/**
 	 * 得到某局域网ip
 	 * @param ipv4
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<String> getSomeIntranetIp(String ipv4) throws Exception{
+	public static List<String> getSomeIntranetIp(String ipv4) throws Exception {
 		List<String> section = getAllIp(ipv4);
 		return section;
 	}
-	public static List<String> getSomeIntranetIp(String ipv4,int port) throws Exception{
+
+	public static List<String> getSomeIntranetIp(String ipv4, int port) throws Exception {
 		List<String> ips = getAllIp(ipv4);
 		List<String> result = new ArrayList<String>(0);
 		StringUtils.errorln(ips);
@@ -138,6 +140,7 @@ public class NetworkUtils {
 		}
 		return result;
 	}
+
 	/**
 	 * 得到局域网的Ip
 	 * @return
@@ -160,7 +163,7 @@ public class NetworkUtils {
 	 * @param port
 	 * @return
 	 */
-	public  static boolean portIsOpen(String ip, int port) {
+	public static boolean portIsOpen(String ip, int port) {
 		Socket client = null;
 		try {
 			client = new Socket(ip, port);
@@ -281,13 +284,12 @@ public class NetworkUtils {
 		BufferedReader in = null;
 		Runtime r = Runtime.getRuntime(); // 将要执行的ping命令,此命令是windows格式的命令
 		String pingCommand = "";
-		if(System.getProperty("os.name").toLowerCase().contains("win")) {
-			 pingCommand = "ping " + ipAddress + " -n " + pingTimes + " -w "
-				+ timeOut;
-		}
-		else{
-			 pingCommand = "ping " + ipAddress + " -c " + pingTimes + " -w "
-						+ timeOut;
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			pingCommand = "ping " + ipAddress + " -n " + pingTimes + " -w "
+					+ timeOut;
+		} else {
+			pingCommand = "ping " + ipAddress + " -c " + pingTimes + " -w "
+					+ timeOut;
 		}
 		StringUtils.errorln(pingCommand);
 		try { // 执行命令并获取输出
@@ -300,12 +302,13 @@ public class NetworkUtils {
 																				// TTL=62字样的次数
 			int connectedCount = 0;
 			String line = null;
-			int x =0 ;
+			int x = 0;
 			while ((line = in.readLine()) != null) {
 				// StringUtils.errorln(line);
 				connectedCount += getCheckResult(line);
 				x++;
-				if(x>=20)return false;
+				if (x >= 20)
+					return false;
 			} // 如果出现类似=23ms TTL=62这样的字样,出现的次数=测试次数则返回真
 			return connectedCount == pingTimes;
 		} catch (Exception ex) {
@@ -326,7 +329,7 @@ public class NetworkUtils {
 	 * @return
 	 */
 	private static int getCheckResult(String line) { // StringUtils.errorln("控制台输出的结果为:"+line);
-		if (line != null && (line.contains("TTL")||line.contains("ttl")))
+		if (line != null && (line.contains("TTL") || line.contains("ttl")))
 			return 1;
 		Pattern pattern = Pattern.compile("(\\d+ms)(\\s+)(TTL=\\d+)",
 				Pattern.CASE_INSENSITIVE);
@@ -336,41 +339,42 @@ public class NetworkUtils {
 		}
 		return 0;
 	}
+
 	/**
 	 * 
 	 * @param urlPath
 	 * @param val
 	 * @return
 	 */
-	public  static String getStringByUrl(String urlPath,Map<String,String> val) throws Exception{
+	public static String getStringByUrl(String urlPath, Map<String, String> val) throws Exception {
 		URL url = new URL(urlPath);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-        connection.setUseCaches(false);
-        connection.setDoOutput(true);
-        connection.connect();
-        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-        StringBuilder content = new StringBuilder();
-        for (Entry<String,String> map : val.entrySet()) {
-			content.append("&"+map.getKey()+"="+ URLEncoder.encode( map.getValue(), "UTF-8"));
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod("POST");
+		connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+		connection.setUseCaches(false);
+		connection.setDoOutput(true);
+		connection.connect();
+		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+		StringBuilder content = new StringBuilder();
+		for (Entry<String, String> map : val.entrySet()) {
+			content.append("&" + map.getKey() + "=" + URLEncoder.encode(map.getValue(), "UTF-8"));
 		}
-        if(content.length()>0)content.deleteCharAt(0);
-        out.writeBytes(content.toString());
-        out.flush();
-        out.close();
-        int responseCode = connection.getResponseCode();
-        StringUtils.errorln(responseCode);
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(),"GBK"));
-        StringBuffer sb = new StringBuffer();
-        String str;
-        while ((str = br.readLine()) != null) {
-            sb.append(str);
-        }
-        return sb.toString();
+		if (content.length() > 0)
+			content.deleteCharAt(0);
+		out.writeBytes(content.toString());
+		out.flush();
+		out.close();
+		int responseCode = connection.getResponseCode();
+		StringUtils.errorln(responseCode);
+		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GBK"));
+		StringBuffer sb = new StringBuffer();
+		String str;
+		while ((str = br.readLine()) != null) {
+			sb.append(str);
+		}
+		return sb.toString();
 	}
 
-	
 	public static void saveToFile(String destUrl, String path) throws Exception {
 		FileOutputStream fos = null;
 		BufferedInputStream bis = null;
@@ -399,7 +403,7 @@ public class NetworkUtils {
 			fos.flush();
 		} catch (Exception e) {
 			throw e;
-		}  finally {
+		} finally {
 			try {
 				fos.close();
 				bis.close();
@@ -408,10 +412,11 @@ public class NetworkUtils {
 			}
 		}
 	}
-	
+
 	public static ImageIcon getImageByUrl(String destUrl) throws Exception {
 		return getImageByUrl(new URL(destUrl));
 	}
+
 	public static ImageIcon getImageByUrl(URL url) throws Exception {
 		BufferedInputStream bis = null;
 		HttpURLConnection httpUrl = null;
@@ -429,36 +434,37 @@ public class NetworkUtils {
 			httpUrl.connect();
 			//httpUrl.setRequestProperty("Connection", "close"); //不进行持久化连接
 			bis = new BufferedInputStream(httpUrl.getInputStream());
-			
+
 			byte[] byteArray = FileUtils.toByteArray(bis);
 			System.out.println(byteArray.length);
-			ByteArrayInputStream in = new ByteArrayInputStream(byteArray);    //将b作为输入流；
-//			BufferedImage image = ImageIO.read(  in);     //将in作为输入流，读取图片存入image中，而这里in可以为ByteArrayInputStream();
-			ImageIcon sdIcon  = new ImageIcon(byteArray);
+			ByteArrayInputStream in = new ByteArrayInputStream(byteArray); //将b作为输入流；
+			//			BufferedImage image = ImageIO.read(  in);     //将in作为输入流，读取图片存入image中，而这里in可以为ByteArrayInputStream();
+			ImageIcon sdIcon = new ImageIcon(byteArray);
 			return sdIcon;
-//			return image;
+			//			return image;
 			//			File file = new File(path);
-//			file.createNewFile();
-//			fos = new FileOutputStream(file);
-//			while ((size = bis.read(buf)) != -1) {
-//				fos.write(buf, 0, size);
-//			}
-//			FileUtils.
-//			fos.flush();
+			//			file.createNewFile();
+			//			fos = new FileOutputStream(file);
+			//			while ((size = bis.read(buf)) != -1) {
+			//				fos.write(buf, 0, size);
+			//			}
+			//			FileUtils.
+			//			fos.flush();
 		} catch (Exception e) {
 			throw e;
-		}  finally {
+		} finally {
 			try {
-//				fos.close();
+				//				fos.close();
 				bis.close();
 				httpUrl.disconnect();
 			} catch (Exception e) {
 			}
 		}
 	}
+
 	public static ImageIcon getIco(String protocol, String host) throws Exception {
-		host = protocol+"://"+host+"/favicon.ico";
+		host = protocol + "://" + host + "/favicon.ico";
 		return getImageByUrl(host);
 	}
-	 
+
 }

@@ -35,16 +35,16 @@ public final class RegularExpression {
 		StringBuffer keyRegex = new StringBuffer();
 		keyRegex.append("(");
 		for (String key : set) {
-			if (!"".equals(key))
-			{
+			if (!"".equals(key)) {
 				keyRegex.append("(").append(escapeExprSpecialWord(key)).append(")").append("|");
 			}
 		}
-		keyRegex.deleteCharAt(keyRegex.length()-1);
+		keyRegex.deleteCharAt(keyRegex.length() - 1);
 		keyRegex.append(")");
-		return replace(content,keyRegex.toString());
+		return replace(content, keyRegex.toString());
 	}
-	public static String replace(String str,String keyRegex) {
+
+	public static String replace(String str, String keyRegex) {
 		StringBuffer htmlSB = new StringBuffer();
 		htmlSB.append(">");
 		htmlSB.append(str);
@@ -54,24 +54,25 @@ public final class RegularExpression {
 		Pattern p_html = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 		Matcher m_html = p_html.matcher(html);
 		StringBuffer sb = new StringBuffer();
-		int t =0;
-		while(m_html.find()){
+		int t = 0;
+		while (m_html.find()) {
 			String group = m_html.group();
 			int indexOf = htmlSB.indexOf(group);
-			sb.append(htmlSB.substring(t,indexOf));
-			htmlSB.delete(0, indexOf+group.length());
+			sb.append(htmlSB.substring(t, indexOf));
+			htmlSB.delete(0, indexOf + group.length());
 			StringBuffer sb1 = new StringBuffer();
 			sb1.append(">");
-			sb1.append(group.substring(1,group.length()-1).replaceAll(keyRegex, "<font color='red'>"
-						+ "$1" + "</font>" ));
+			sb1.append(group.substring(1, group.length() - 1).replaceAll(keyRegex, "<font color='red'>"
+					+ "$1" + "</font>"));
 			sb1.append("<");
 			sb.append(sb1);
 		}
 		sb.deleteCharAt(0);
-		sb.deleteCharAt(sb.length()-1);
+		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
-	public static String escapeExprSpecialWord(String keyword) {  
+
+	public static String escapeExprSpecialWord(String keyword) {
 		String[] fbsArr = { "\\", "$", "(", ")", "*", "+", ".", "[", "]", "?",
 				"^", "{", "}", "|" };
 		for (String key : fbsArr) {
@@ -79,15 +80,16 @@ public final class RegularExpression {
 				keyword = keyword.replace(key, "\\" + key);
 			}
 		}
-	    return keyword;  
-	}  
+		return keyword;
+	}
+
 	/**
 	 * 处理字符串,将查询到的内容,去掉html标签.只获取八十个字符.并把关键词中的内容替换成红色加粗.
 	 * @param keyWord
 	 * @param object
 	 * @return
 	 */
-	public static  String realContent(String keyWord, Object object) {
+	public static String realContent(String keyWord, Object object) {
 		String content = object == null ? "" : object.toString();
 		String regEx_html = "<(?!(a|sub|/a|/sub))[^>]+>"; // 定义HTML标签的正则表达式
 		// String regEx_html = "<[^(>|a|sub)]+>"; // 定义HTML标签的正则表达式
@@ -104,13 +106,14 @@ public final class RegularExpression {
 		}
 		return content;
 	}
+
 	/**
 	 * 分词
 	 * 
 	 * @param split
 	 * @return
 	 */
-	public static  Set<String> getKey(String[] split) {
+	public static Set<String> getKey(String[] split) {
 		Set<String> set = new HashSet<String>(0);
 		for (String string : split) {
 			if (!"".equals(string.trim())) {
