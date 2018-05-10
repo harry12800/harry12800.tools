@@ -355,6 +355,7 @@ public class NetworkUtils {
 		connection.connect();
 		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 		StringBuilder content = new StringBuilder();
+		if(val!=null)
 		for (Entry<String, String> map : val.entrySet()) {
 			content.append("&" + map.getKey() + "=" + URLEncoder.encode(map.getValue(), "UTF-8"));
 		}
