@@ -348,7 +348,7 @@ public class NetworkUtils {
 	public static String getStringByUrl(String urlPath, Map<String, String> val) throws Exception {
 		URL url = new URL(urlPath);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setRequestMethod("POST");
+		connection.setRequestMethod("GET");
 		connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 		connection.setUseCaches(false);
 		connection.setDoOutput(true);

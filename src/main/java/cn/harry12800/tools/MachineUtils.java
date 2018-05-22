@@ -216,7 +216,7 @@ public class MachineUtils {
 
 	/**
 	 * 根据类名获取当前的类 是在jar包中，还是在文件目录中。
-	 * 
+	 * jar 包中返回true，file 中返回false
 	 * @param clazz
 	 * @return
 	 */
