@@ -4,7 +4,7 @@
 
 	<groupId>cn.harry12800</groupId>
 	<artifactId>harry12800.tools</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>harry12800.tools</name>
