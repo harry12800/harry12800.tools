@@ -225,10 +225,6 @@ public class MachineUtils {
 		return getByClass(simpleName.replace(".", "/"));
 	}
 
-	public static void main(String[] args) {
-		getByClass(MachineUtils.class);
-	}
-
 	/**
 	 * 根据包名获取当前的类 是在jar包中，还是在文件目录中。
 	 * 
@@ -295,6 +291,30 @@ public class MachineUtils {
 			sb1.append(line).append("\r\n");
 		}
 		in = new BufferedReader(new InputStreamReader(exec.getErrorStream(), "GBK"));
+		StringBuffer sb2 = new StringBuffer();
+		while ((line = in.readLine()) != null) {
+			sb2.append(line).append("\r\n");
+		}
+		return new String[] { sb1.toString(), sb2.toString() };
+	}
+
+	public static void main(String[] args) {
+		try {
+			runtimeCmd("ipconfig /all");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static String[] runtimeCmd(String cmd) throws IOException {
+		ProcessBuilder pb = new ProcessBuilder();
+		Process start = pb.command(cmd.split(" ")).start();
+		BufferedReader in = new BufferedReader(new InputStreamReader(start.getInputStream(), "GBK"));
+		StringBuffer sb1 = new StringBuffer();
+		String line;
+		while ((line = in.readLine()) != null) {
+			sb1.append(line).append("\r\n");
+		}
+		in = new BufferedReader(new InputStreamReader(start.getErrorStream(), "GBK"));
 		StringBuffer sb2 = new StringBuffer();
 		while ((line = in.readLine()) != null) {
 			sb2.append(line).append("\r\n");
