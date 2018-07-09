@@ -7,7 +7,7 @@ package cn.harry12800.entity;
  */
 public class Area extends TreeEntity<Area> {
 
-	private static final long serialVersionUID = 1L;
+	private static  final long serialVersionUID = 1L;
 	//	private Area parent;	// 父级编号
 	//	private String parentIds; // 所有父级编号
 	private String code; // 区域编码
