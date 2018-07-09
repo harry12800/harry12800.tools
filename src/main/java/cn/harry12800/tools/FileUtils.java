@@ -505,7 +505,25 @@ public class FileUtils {
 		}
 		return list;
 	}
-
+	/**
+	 * 得到文件的每一行内容存入list
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static List<String> getRowByStream(InputStream in) {
+		List<String> list = new ArrayList<String>(0);
+		String line;
+		try (InputStreamReader read = new InputStreamReader(in, "gbk");
+				BufferedReader reader = new BufferedReader(read);) {
+			while ((line = reader.readLine()) != null) {
+				list.add(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	/**
 	 * 得到文件的第从start行到end行内容存入sb
 	 * 
@@ -731,7 +749,7 @@ public class FileUtils {
 	 * 
 	 * @param path
 	 * @param content
-	 */
+	 */ 
 	public static void realContent(String path, String content) {
 		createFile(path);
 		try (FileOutputStream fos = new FileOutputStream(path);
