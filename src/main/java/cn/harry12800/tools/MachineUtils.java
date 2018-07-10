@@ -305,6 +305,7 @@ public class MachineUtils {
 			e.printStackTrace();
 		}
 	}
+
 	public static String[] runtimeCmd(String cmd) throws IOException {
 		ProcessBuilder pb = new ProcessBuilder();
 		Process start = pb.command(cmd.split(" ")).start();
@@ -346,7 +347,7 @@ public class MachineUtils {
 				System.out.println("打开的File:" + file);
 				String cmd = "java -jar " + file;
 				System.out.println(cmd);
-				Runtime.getRuntime().exec(cmd);
+				runtimeCmd(cmd);
 				return;
 			}
 			Class<?> forName = null;
@@ -362,7 +363,7 @@ public class MachineUtils {
 				System.out.println("打开的File:" + file);
 				String cmd = "java -jar " + file;
 				System.out.println(cmd);
-				Runtime.getRuntime().exec(cmd);
+				runtimeCmd(cmd);
 			} else {
 				// MachineUtils.printSystemProperties();
 				String file = System.getProperty("java.class.path");
@@ -373,7 +374,7 @@ public class MachineUtils {
 				String cmd2 = "cmd /c java -Dfile.encoding=utf-8 -classpath %classpath% " + clazz;
 				String string2 = "cmd /c set classpath=" + file + " && cmd /c echo %classpath% &&" + cmd2;
 				System.out.println("cmd:" + string2);
-				String[] runtimeOutErr = MachineUtils.runtimeOutErr(string2);
+				String[] runtimeOutErr = MachineUtils.runtimeCmd(string2);
 				System.out.println(runtimeOutErr[0]);
 				System.err.println(runtimeOutErr[1]);
 				// string = MachineUtils.runtimeErr(string2);
