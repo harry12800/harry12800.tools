@@ -342,6 +342,11 @@ public class MachineUtils {
 	public static void reStart() {
 		try {
 			String clazz = System.getProperty("sun.java.command");
+			System.out.println(clazz);
+			int indexOf = clazz.indexOf(" ");
+			if(indexOf!=-1){
+				clazz = clazz.split(" ")[0];
+			}
 			if (new File(clazz).exists()) {
 				String file = System.getProperty("java.class.path");
 				System.out.println("打开的File:" + file);
