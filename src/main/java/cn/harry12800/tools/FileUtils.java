@@ -17,6 +17,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.math.BigInteger;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1339,5 +1343,38 @@ public class FileUtils {
 			}
 		}
 		return "";
+	}
+
+	public static String getMD5(String path) throws Exception
+	{
+		String strMD5 = null;
+		File file = new File(path);
+		FileInputStream in = new FileInputStream(file);
+		MappedByteBuffer buffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+		MessageDigest digest = MessageDigest.getInstance("md5");
+		digest.update(buffer);
+		in.close();
+		
+		byte[] byteArr = digest.digest();
+		BigInteger bigInteger = new BigInteger(1, byteArr);
+		strMD5 = bigInteger.toString(16);
+		return strMD5;
+	}
+	
+	static String getMD54ByteArray(String path) throws Exception
+	{
+		String strMD5 = null;
+		MessageDigest digest = MessageDigest.getInstance("md5");
+		InputStream in = new FileInputStream(path);
+		byte[] buff = new byte[1024];
+		int size = -1;
+		while((size=in.read(buff))!=-1)
+		{
+			digest.update(buff, 0, size);
+		}
+		in.close();
+		BigInteger bigInteger = new BigInteger(1, digest.digest());
+		strMD5  = bigInteger.toString(16);
+		return strMD5;
 	}
 }
