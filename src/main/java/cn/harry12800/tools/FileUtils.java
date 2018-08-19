@@ -1411,7 +1411,7 @@ public class FileUtils {
 	 * @param position  位置下标
 	 * @param b  字节
 	 */
-	public static void writeFile(File file, int position, byte[] b) {
+	public static void writeFile(File file, long position, byte[] b) {
 		try (RandomAccessFile raf = new RandomAccessFile(file, "rw");) {
 			raf.seek(position);
 			raf.write(b);
