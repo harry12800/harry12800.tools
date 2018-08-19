@@ -16,8 +16,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -509,6 +511,7 @@ public class FileUtils {
 		}
 		return list;
 	}
+
 	/**
 	 * 得到文件的每一行内容存入list
 	 * 
@@ -528,6 +531,7 @@ public class FileUtils {
 		}
 		return list;
 	}
+
 	/**
 	 * 得到文件的第从start行到end行内容存入sb
 	 * 
@@ -753,7 +757,7 @@ public class FileUtils {
 	 * 
 	 * @param path
 	 * @param content
-	 */ 
+	 */
 	public static void realContent(String path, String content) {
 		createFile(path);
 		try (FileOutputStream fos = new FileOutputStream(path);
@@ -1345,8 +1349,7 @@ public class FileUtils {
 		return "";
 	}
 
-	public static String getMD5(String path) throws Exception
-	{
+	public static String getMD5(String path) throws Exception {
 		String strMD5 = null;
 		File file = new File(path);
 		FileInputStream in = new FileInputStream(file);
@@ -1354,27 +1357,78 @@ public class FileUtils {
 		MessageDigest digest = MessageDigest.getInstance("md5");
 		digest.update(buffer);
 		in.close();
-		
+
 		byte[] byteArr = digest.digest();
 		BigInteger bigInteger = new BigInteger(1, byteArr);
 		strMD5 = bigInteger.toString(16);
 		return strMD5;
 	}
-	
-	static String getMD54ByteArray(String path) throws Exception
-	{
+
+	static String getMD54ByteArray(String path) throws Exception {
 		String strMD5 = null;
 		MessageDigest digest = MessageDigest.getInstance("md5");
 		InputStream in = new FileInputStream(path);
 		byte[] buff = new byte[1024];
 		int size = -1;
-		while((size=in.read(buff))!=-1)
-		{
+		while ((size = in.read(buff)) != -1) {
 			digest.update(buff, 0, size);
 		}
 		in.close();
 		BigInteger bigInteger = new BigInteger(1, digest.digest());
-		strMD5  = bigInteger.toString(16);
+		strMD5 = bigInteger.toString(16);
 		return strMD5;
+	}
+
+	/** 
+	 * 创建固定大小的文件 
+	 * @param file 
+	 * @param length 
+	 * @throws IOException  
+	 */
+	public static void createFixLengthFile1(File file, long length) throws IOException {
+		try (FileOutputStream fos = new FileOutputStream(file);
+				FileChannel output = fos.getChannel();) {
+			output.write(ByteBuffer.allocate(1), length - 1);
+		}
+	}
+
+	/** 
+	 * 创建固定大小的文件 
+	 * @param file 
+	 * @param length 
+	 * @throws IOException  
+	 */
+	public static void createFixLengthFile2(File file, long length) throws IOException {
+		try (
+				RandomAccessFile r = new RandomAccessFile(file, "rw");) {
+			r.setLength(length);
+		}
+	}
+
+	/**
+	 * 字节写入到文件指定位置。
+	 * @param file  文件
+	 * @param position  位置下标
+	 * @param b  字节
+	 */
+	public static void writeFile(File file, int position, byte[] b) {
+		try (RandomAccessFile raf = new RandomAccessFile(file, "rw");) {
+			raf.seek(position);
+			raf.write(b);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) throws IOException {
+		String filePath = "C:\\Users\\harry12800\\Desktop";
+		File f = new File(filePath, "aaaa.txt");
+		createFixLengthFile2(f, 1L);
+		String a = "abcd";
+		String b = "efgh";
+		String c = "ijkl";
+		writeFile(f, 0, a.getBytes());
+		writeFile(f, a.getBytes().length, b.getBytes());
+		writeFile(f, a.getBytes().length + b.getBytes().length, c.getBytes());
 	}
 }
