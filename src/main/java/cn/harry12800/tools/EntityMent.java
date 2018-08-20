@@ -303,8 +303,14 @@ public class EntityMent {
 		if (type.equalsIgnoreCase("tinyint")) {
 			return "Integer";
 		}
+		if (type.equalsIgnoreCase("bigint")) {
+			return "Long";
+		}
 		if (type.equalsIgnoreCase("datetime")) {
 			return "java.util.Date";
+		}
+		if (type.equalsIgnoreCase("longtext")) {
+			return "String";
 		}
 		return type;
 	}
