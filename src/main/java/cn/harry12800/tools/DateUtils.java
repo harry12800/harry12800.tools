@@ -72,7 +72,12 @@ public class DateUtils {
 		String format = df.format(date);
 		return format;
 	}
-
+	
+	public static String getwholeCurrTime(Date date) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String format = df.format(date);
+		return format;
+	}
 	public static String getCurrTimeByFormat(String format) {
 		SimpleDateFormat df = new SimpleDateFormat(format);
 		String time = df.format(new Date());
@@ -88,6 +93,17 @@ public class DateUtils {
 	public static Date getDateByFormat(String triggerTime, String format) throws ParseException {
 		SimpleDateFormat dateFormat1 = new SimpleDateFormat(format);
 		Date date = dateFormat1.parse(triggerTime);
+		return date;
+	}
+
+	public static Date getInitTime() {
+		SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = dateFormat1.parse("1970-01-01");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		return date;
 	}
 }
