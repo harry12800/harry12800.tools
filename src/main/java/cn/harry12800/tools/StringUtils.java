@@ -1094,4 +1094,19 @@ public class StringUtils {
 			return title;
 		return title.substring(0, lastIndexOf);
 	}
+	
+	/**
+	 * 拿到文件名后缀
+	 * @param title
+	 * @return
+	 */
+	public static String getSuffix(String title) {
+		if (title == null) {
+			return "";
+		}
+		int lastIndexOf = title.lastIndexOf(".");
+		if (lastIndexOf < 0)
+			return "";
+		return title.substring(lastIndexOf, title.length());
+	}
 }
