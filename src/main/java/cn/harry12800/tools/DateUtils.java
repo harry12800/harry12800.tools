@@ -72,12 +72,13 @@ public class DateUtils {
 		String format = df.format(date);
 		return format;
 	}
-	
+
 	public static String getwholeCurrTime(Date date) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String format = df.format(date);
 		return format;
 	}
+
 	public static String getCurrTimeByFormat(String format) {
 		SimpleDateFormat df = new SimpleDateFormat(format);
 		String time = df.format(new Date());

@@ -266,52 +266,52 @@ public class EntityMent {
 		return method.invoke(owner);
 	}
 
-	public static String getDb2attrMap(String type) {
+	public static String[] getDb2attrMap(String type) {
 
 		if (type.equalsIgnoreCase("TIMESTAMP"))
-			return "Date";
+			return new String[] { "java.util.Date", "java.util.Date" };
 		if (type.equalsIgnoreCase("VARCHAR")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.startsWith("VARCHAR")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.startsWith("varchar")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.equalsIgnoreCase("INT")) {
-			return "Integer";
+			return new String[] { "Integer", "java.lang.Integer" };
 		}
 		if (type.equalsIgnoreCase("NUMBER")) {
-			return "Double";
+			return new String[] { "Double", "java.lang.Double" };
 		}
 		if (type.equalsIgnoreCase("CHAR")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.equalsIgnoreCase("LONG")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.equalsIgnoreCase("BLOB")) {
-			return "byte[]";
+			return new String[] { "byte[]", "byte[]" };
 		}
 		if (type.equalsIgnoreCase("mediumtext")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.equalsIgnoreCase("text")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
 		if (type.equalsIgnoreCase("tinyint")) {
-			return "Integer";
+			return new String[] { "Integer", "java.lang.Integer" };
 		}
 		if (type.equalsIgnoreCase("bigint")) {
-			return "Long";
+			return new String[] { "Long", "java.lang.Long" };
 		}
 		if (type.equalsIgnoreCase("datetime")) {
-			return "java.util.Date";
+			return new String[] { "java.util.Date", "java.util.Date" };
 		}
 		if (type.equalsIgnoreCase("longtext")) {
-			return "String";
+			return new String[] { "String", "java.lang.String" };
 		}
-		return type;
+		return new String[] { type, type };
 	}
 }

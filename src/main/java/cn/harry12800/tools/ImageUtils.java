@@ -480,6 +480,7 @@ public class ImageUtils {
 		}
 		return length / 2;
 	}
+
 	/**
 	 * 图片设置圆角
 	 *

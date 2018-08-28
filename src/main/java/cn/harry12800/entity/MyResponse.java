@@ -73,5 +73,5 @@ public class MyResponse {
 	public String toString() {
 		return "MyResponse [code=" + code + ", msg=" + msg + ", content=" + content + "]";
 	}
-	
+
 }

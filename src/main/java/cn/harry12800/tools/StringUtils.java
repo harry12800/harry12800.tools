@@ -1094,7 +1094,7 @@ public class StringUtils {
 			return title;
 		return title.substring(0, lastIndexOf);
 	}
-	
+
 	/**
 	 * 拿到文件名后缀
 	 * @param title

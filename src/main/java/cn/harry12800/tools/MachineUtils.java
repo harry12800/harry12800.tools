@@ -344,7 +344,7 @@ public class MachineUtils {
 			String clazz = System.getProperty("sun.java.command");
 			System.out.println(clazz);
 			int indexOf = clazz.indexOf(" ");
-			if(indexOf!=-1){
+			if (indexOf != -1) {
 				clazz = clazz.split(" ")[0];
 			}
 			if (new File(clazz).exists()) {
