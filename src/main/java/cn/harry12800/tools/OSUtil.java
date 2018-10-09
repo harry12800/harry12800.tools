@@ -21,9 +21,9 @@ public class OSUtil {
 	public static int getOsType() {
 		if (currentOS == -1) {
 			String os = System.getProperty("os.name");
-			if (os.indexOf("Windows") > -1) {
+			if (os.toLowerCase().indexOf("win") > -1) {
 				currentOS = Windows;
-			} else if (os.indexOf("Linux") > -1) {
+			} else if (os.toLowerCase().indexOf("linux") > -1) {
 				currentOS = Linux;
 			} else if (os.indexOf("Mac OS") > -1) {
 				currentOS = Mac_OS;
