@@ -1209,7 +1209,38 @@ public class FileUtils {
 			}
 		}
 	}
-
+	/**
+	 * 字节到文件。
+	 * @param buf
+	 * @param filePath
+	 * @param fileName
+	 */
+	public static void byte2File(byte[] buf, String filePath) {
+		BufferedOutputStream bos = null;
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(new File(filePath));
+			bos = new BufferedOutputStream(fos);
+			bos.write(buf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (bos != null) {
+				try {
+					bos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	// 把文件读入byte数组
 	static public byte[] readFile(String filename) throws IOException {
 		File file = new File(filename);
@@ -1419,16 +1450,93 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args) throws IOException {
-		String filePath = "C:\\Users\\harry12800\\Desktop";
-		File f = new File(filePath, "aaaa.txt");
-		createFixLengthFile2(f, 1L);
-		String a = "abcd";
-		String b = "efgh";
-		String c = "ijkl";
-		writeFile(f, 0, a.getBytes());
-		writeFile(f, a.getBytes().length, b.getBytes());
-		writeFile(f, a.getBytes().length + b.getBytes().length, c.getBytes());
+	public static void main(String[] args) {
+		try {
+//			encode("C:/Workspaces/harry12800.develper.rar", "C:/Workspaces/harry12800.develper.txt");
+//			encode("C:/Workspaces/harry12800.tools.rar", "C:/Workspaces/harry12800.tools.txt");
+//			encode("C:/Workspaces/dev-docs.zip", "C:/Workspaces/dev-docs.zip.txt");
+			decode("C:/Users/harry12800/Desktop/docs.txt", "C:/Users/harry12800/Desktop/docs.rar");
+//			decode("C:/Workspaces/harry12800.tools.txt", "C:/Workspaces/b.rar");
+//			decode("C:/Workspaces/dev-docs.zip.txt", "C:/Workspaces/c.zip");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-}
+
+	/**
+	 *  文件加密
+	 * @param path
+	 * @param outPath
+	 * @throws IOException
+	 */
+	public static void encode(String path,String outPath) throws IOException {
+		byte[] bytes = file2byte1(path);
+		int i  = 0 ;
+		for (byte b : bytes) {
+//			printByte(b);
+			bytes[i++] = exchange((byte) ~b);
+//			printByte((byte) ~b);
+//			printByte( exchange((byte) ~b));
+//			System.out.println();
+		}
+		byte2File(bytes, outPath);
+		
+	}
+	/**
+	 * 文件解密
+	 * @param path
+	 * @param outPath
+	 * @throws IOException
+	 */
+	public static void decode(String path,String outPath) throws IOException {
+		byte[] bytes = file2byte1(path);
+		int i  = 0 ;
+		for (byte b : bytes) {
+			bytes[i++] = (byte) ~exchange(b);
+		}
+		byte2File(bytes, outPath);
+	}
+	/**
+	 * Aj45
+	 * @param i
+	 * @return
+	 */
+	private static byte exchange(byte i) {
+		int bit1 = (i >> 7) & 1;
+		int bit2 = (i >> 6) & 1;
+		int bit3 = (i >> 5) & 1;
+		int bit6 = (i >> 2) & 1;
+//		System.out.println(bit1);
+//		System.out.println(bit2);
+//		System.out.println(bit3);
+//		System.out.println(bit6);
+		if (bit1 == 1)
+			i = (byte) (i | 0x20);
+		else
+			i = (byte) (i & 0xDF);//11011111
+		if (bit2 == 1)
+			i = (byte) (i | 0x04);
+		else
+			i = (byte) (i & 0xFB);//11111011
+		if (bit3 == 1)
+			i = (byte) (i | 0x80);
+		else
+			i = (byte) (i & 0x7F);//01111111
+		if (bit6 == 1)
+			i = (byte) (i | 0x40);
+		else
+			i = (byte) (i & 0xBF);//10111111
+		return i;
+	}
+	 
+	public static void printByte(byte a) {
+		int y = a;
+		int x = 8;
+		while (x-- > 0) {
+			y = (byte) (a >> x);
+			System.out.print((y & 1));
+		}
+		System.out.println();
+	}
+} 
+		

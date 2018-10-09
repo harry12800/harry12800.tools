@@ -58,6 +58,7 @@ public class JavaKeyWord {
 		keywords.add("void");
 		keywords.add("volatile");
 		keywords.add("while");
+		keywords.add("return");
 	}
 	//	abstract	表明类或者成员方法具有抽象属性
 	//	assert	用来进行程序调试

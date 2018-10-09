@@ -42,6 +42,21 @@ public class MachineUtils {
 	}
 
 	/**
+	 * 将/src/main/resources/proto的proto文件在/src/main/java下生成java文件
+	 */
+	public static void generateProtoBufJavaEntity(){
+		String path = MachineUtils.getProjectPath() + "/src/main/java";
+		String src = MachineUtils.getProjectPath() + "/src/main/resources/proto";
+		String strCmd = "protoc -I=" + src + " --java_out=" + path + "  " + src + "/***.proto";
+		System.err.println(strCmd);
+		try {
+			Runtime.getRuntime().exec(strCmd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} //通过执行cmd命令调用protoc.exe程序  
+
+	}
+	/**
 	 * java(Swing)获取任务栏的高度
 	 */
 	public static int getTaskBarHeight() {
