@@ -312,6 +312,9 @@ public class EntityMent {
 		if (type.equalsIgnoreCase("longtext")) {
 			return new String[] { "String", "java.lang.String" };
 		}
+		if (type.equalsIgnoreCase("longblob")) {
+			return new String[] { "byte[]", "java.lang.String" };
+		}
 		return new String[] { type, type };
 	}
 }
