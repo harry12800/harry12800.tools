@@ -1380,6 +1380,12 @@ public class FileUtils {
 		return "";
 	}
 
+	/**
+	 * 获取文件的Md5值
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
 	public static String getMD5(String path) throws Exception {
 		String strMD5 = null;
 		File file = new File(path);
@@ -1394,7 +1400,25 @@ public class FileUtils {
 		}
 		return strMD5;
 	}
-
+	/**
+	 * 获取文件的Md5值
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getMD5(File file) throws Exception {
+		String strMD5 = null;
+		try (
+				FileInputStream in = new FileInputStream(file);) {
+			MappedByteBuffer buffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+			MessageDigest digest = MessageDigest.getInstance("md5");
+			digest.update(buffer);
+			byte[] byteArr = digest.digest();
+			BigInteger bigInteger = new BigInteger(1, byteArr);
+			strMD5 = bigInteger.toString(16);
+		}
+		return strMD5;
+	}
 	static String getMD54ByteArray(String path) throws Exception {
 		String strMD5 = null;
 		MessageDigest digest = MessageDigest.getInstance("md5");
