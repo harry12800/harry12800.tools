@@ -43,16 +43,14 @@ public class FileUtils {
 	 * @param filePath
 	 * @throws IOException
 	 */
-	public static void map2Properties(Map<String, String> map, String filePath)
-			throws IOException {
+	public static void map2Properties(Map<String, String> map, String filePath) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, String> enty : map.entrySet()) {
 			sb.append(enty.getKey() + "=" + enty.getValue() + "\r\n");
 		}
 		File file = new File(filePath);
 		FileUtils.createFile(filePath);
-		try (FileOutputStream fos = new FileOutputStream(file);
-				Writer out = new OutputStreamWriter(fos, "UTF-8");) {
+		try (FileOutputStream fos = new FileOutputStream(file); Writer out = new OutputStreamWriter(fos, "UTF-8");) {
 			out.write(sb.toString());
 		}
 	}
@@ -64,14 +62,12 @@ public class FileUtils {
 	 * @param file
 	 * @throws IOException
 	 */
-	public static void map2Properties(Map<String, String> map, File file)
-			throws IOException {
+	public static void map2Properties(Map<String, String> map, File file) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, String> enty : map.entrySet()) {
 			sb.append(enty.getKey() + "=" + enty.getValue() + "\r\n");
 		}
-		try (FileOutputStream fos = new FileOutputStream(file);
-				Writer out = new OutputStreamWriter(fos, "UTF-8");) {
+		try (FileOutputStream fos = new FileOutputStream(file); Writer out = new OutputStreamWriter(fos, "UTF-8");) {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
@@ -86,18 +82,13 @@ public class FileUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, String> properties2Map(InputStream in)
-			throws IOException {
+	public static Map<String, String> properties2Map(InputStream in) throws IOException {
 		Map<String, String> map = new HashMap<String, String>(0);
 		Properties props = new Properties();
 		props.load(in);
 		for (Entry<Object, Object> entry : props.entrySet()) {
-			String key = new String(
-					(entry.getKey() + "").getBytes("ISO8859-1"), "utf-8")
-							.trim();
-			String value = new String(
-					(entry.getValue() + "").getBytes("ISO8859-1"), "utf-8")
-							.trim();
+			String key = new String((entry.getKey() + "").getBytes("ISO8859-1"), "utf-8").trim();
+			String value = new String((entry.getValue() + "").getBytes("ISO8859-1"), "utf-8").trim();
 			// StringUtils.errorln(key+":"+value);
 			map.put(key, value);// 配置文件必须设置成utf-8格式，并支持中文
 		}
@@ -106,6 +97,7 @@ public class FileUtils {
 
 	/**
 	 * 修改配置
+	 * 
 	 * @param file
 	 * @param key
 	 * @param value
@@ -119,8 +111,7 @@ public class FileUtils {
 		prop.store(outputFile, "modify");
 	}
 
-	public static Map<String, String> file2Map(String filePath)
-			throws IOException {
+	public static Map<String, String> file2Map(String filePath) throws IOException {
 		Map<String, String> map = new LinkedHashMap<String, String>(0);
 		List<String> rowByFile = getRowByFile(new File(filePath));
 		for (String str : rowByFile) {
@@ -132,8 +123,7 @@ public class FileUtils {
 		return map;
 	}
 
-	public static Map<String, String> file2Map(String filePath, String charset)
-			throws IOException {
+	public static Map<String, String> file2Map(String filePath, String charset) throws IOException {
 		Map<String, String> map = new LinkedHashMap<String, String>(0);
 		List<String> rowByFile = getRowByFile(new File(filePath), charset);
 		for (String str : rowByFile) {
@@ -151,21 +141,15 @@ public class FileUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, String> properties2Map(String filePath)
-			throws IOException {
+	public static Map<String, String> properties2Map(String filePath) throws IOException {
 		Map<String, String> map = new HashMap<String, String>(0);
 		Properties props = new Properties();
-		InputStream in = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(filePath);
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
 		System.out.println(in);
 		props.load(in);
 		for (Entry<Object, Object> entry : props.entrySet()) {
-			String key = new String(
-					(entry.getKey() + "").getBytes("ISO8859-1"), "utf-8")
-							.trim();
-			String value = new String(
-					(entry.getValue() + "").getBytes("ISO8859-1"), "utf-8")
-							.trim();
+			String key = new String((entry.getKey() + "").getBytes("ISO8859-1"), "utf-8").trim();
+			String value = new String((entry.getValue() + "").getBytes("ISO8859-1"), "utf-8").trim();
 			StringUtils.errorln(key + ":" + value);
 			map.put(key, value);// 配置文件必须设置成utf-8格式，并支持中文
 		}
@@ -187,7 +171,7 @@ public class FileUtils {
 			StringUtils.errorln("b===" + b);
 			StringUtils.errorln("创建目录啦" + path);
 		} else {
-			//			StringUtils.outln("//目录存在");
+			// StringUtils.outln("//目录存在");
 		}
 	}
 
@@ -203,6 +187,7 @@ public class FileUtils {
 
 	/**
 	 * 方法说明：创建文件
+	 * 
 	 * @param file
 	 */
 	public static void createFile(File file) {
@@ -285,6 +270,7 @@ public class FileUtils {
 
 	/**
 	 * 方法说明：递归删除目录及子目录
+	 * 
 	 * @param filepath
 	 */
 	public static boolean delPath(String filepath) {
@@ -312,9 +298,10 @@ public class FileUtils {
 
 	/**
 	 * 将本目录的文件全部复制到des目录下
+	 * 
 	 * @param src
 	 * @param des
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void copyDirectory(String src, String des) throws Exception {
 		File file = new File(src);
@@ -329,8 +316,7 @@ public class FileUtils {
 				file1.getParentFile().mkdirs();
 				file1.createNewFile();
 			}
-			try (FileInputStream is = new FileInputStream(file);
-					FileOutputStream ps = new FileOutputStream(file1);) {
+			try (FileInputStream is = new FileInputStream(file); FileOutputStream ps = new FileOutputStream(file1);) {
 				is.read(b);
 				ps.write(b);
 			}
@@ -346,6 +332,7 @@ public class FileUtils {
 
 	/**
 	 * 复制文件到目录下。
+	 * 
 	 * @param srcFilePath
 	 * @param destDirPath
 	 * @return
@@ -359,6 +346,7 @@ public class FileUtils {
 
 	/**
 	 * 复制文件到目录下。
+	 * 
 	 * @param srcFilePath
 	 * @param destDirPath
 	 * @return
@@ -376,8 +364,7 @@ public class FileUtils {
 		if (!descFile.exists())
 			descFile.createNewFile();
 		byte[] b = new byte[(int) file.length()];
-		try (FileInputStream is = new FileInputStream(file);
-				FileOutputStream ps = new FileOutputStream(descFile);) {
+		try (FileInputStream is = new FileInputStream(file); FileOutputStream ps = new FileOutputStream(descFile);) {
 			is.read(b);
 			ps.write(b);
 		}
@@ -387,6 +374,7 @@ public class FileUtils {
 
 	/**
 	 * 复制文件到目录下。
+	 * 
 	 * @param srcFilePath
 	 * @param destDirPath
 	 * @return
@@ -397,8 +385,7 @@ public class FileUtils {
 		if (!desc.exists())
 			desc.createNewFile();
 		byte[] b = new byte[(int) src.length()];
-		try (FileInputStream is = new FileInputStream(src);
-				FileOutputStream ps = new FileOutputStream(desc);) {
+		try (FileInputStream is = new FileInputStream(src); FileOutputStream ps = new FileOutputStream(desc);) {
 			is.read(b);
 			ps.write(b);
 		}
@@ -407,6 +394,7 @@ public class FileUtils {
 
 	/**
 	 * 将文件夹移动到另一个位置
+	 * 
 	 * @param srcPath
 	 * @param destPath
 	 * @return
@@ -424,6 +412,7 @@ public class FileUtils {
 
 	/**
 	 * 把文件<code>file</code>移到dirpath文件夹下
+	 * 
 	 * @param file
 	 * @param dirPath
 	 */
@@ -432,14 +421,14 @@ public class FileUtils {
 			StringUtils.errorln("文件不存在！没法移走！");
 		}
 		createDirectory(dirPath);
-		String path = new File(dirPath).getAbsolutePath() + "\\"
-				+ file.getName();
+		String path = new File(dirPath).getAbsolutePath() + "\\" + file.getName();
 		StringUtils.errorln(path);
 		file.renameTo(new File(path));
 	}
 
 	/**
 	 * 把文件<code>file</code>移到dirpath文件夹下
+	 * 
 	 * @param file
 	 * @param dirPath
 	 */
@@ -448,8 +437,7 @@ public class FileUtils {
 			StringUtils.errorln("文件不存在！没法移走！");
 		}
 		createDirectory(dirPath);
-		String path = new File(dirPath).getAbsolutePath() + File.separator
-				+ file.getName();
+		String path = new File(dirPath).getAbsolutePath() + File.separator + file.getName();
 		StringUtils.errorln(path);
 		if (force) {
 			File desfile = new File(path);
@@ -475,6 +463,7 @@ public class FileUtils {
 
 	/**
 	 * 把第一个路径下的移到dirpath文件夹下
+	 * 
 	 * @param file
 	 * @param dirPath
 	 */
@@ -484,6 +473,7 @@ public class FileUtils {
 
 	/**
 	 * 把第一个路径下的移到dirpath文件夹下
+	 * 
 	 * @param file
 	 * @param dirPath
 	 */
@@ -581,15 +571,15 @@ public class FileUtils {
 	}
 
 	/**
-	 * 获取文件中的文本  数据会在一行
+	 * 获取文件中的文本 数据会在一行
+	 * 
 	 * @param path
 	 * @return
 	 */
 	public static String getStringByFilePath(String path) {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line);
@@ -611,16 +601,14 @@ public class FileUtils {
 	 * @param content
 	 * @return
 	 */
-	public static String getStringByFilePath(String path, int row,
-			String content) {
+	public static String getStringByFilePath(String path, int row, String content) {
 		String line;
 		StringBuffer html = new StringBuffer("");
 		int index = 0;
 		if (row <= index) {
 			html.append(content);
 		}
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				index++;
@@ -647,8 +635,7 @@ public class FileUtils {
 	public static String getSrcByFilePath(String path) {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), "gbk");
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), "gbk");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -664,13 +651,12 @@ public class FileUtils {
 	 * 
 	 * @param path
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static String getSrcByFilePath(String path, String charset) throws Exception {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), charset);
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), charset);
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -690,8 +676,7 @@ public class FileUtils {
 	public static String getSrcByFilePath(File file, String charset) {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(file), charset);
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(file), charset);
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -711,9 +696,8 @@ public class FileUtils {
 	public static String getStringByFileName(String fileName) {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(Thread
-				.currentThread().getContextClassLoader()
-				.getResourceAsStream(fileName), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(
+				Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + "\r\n");
@@ -736,9 +720,8 @@ public class FileUtils {
 	public static String getSqlStringByFileName(String fileName) {
 		String line;
 		StringBuffer html = new StringBuffer("");
-		try (InputStreamReader read = new InputStreamReader(Thread
-				.currentThread().getContextClassLoader()
-				.getResourceAsStream(fileName), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(
+				Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				html = html.append(line + " ");
@@ -760,8 +743,7 @@ public class FileUtils {
 	 */
 	public static void realContent(String path, String content) {
 		createFile(path);
-		try (FileOutputStream fos = new FileOutputStream(path);
-				Writer out = new OutputStreamWriter(fos, "UTF-8");) {
+		try (FileOutputStream fos = new FileOutputStream(path); Writer out = new OutputStreamWriter(fos, "UTF-8");) {
 			out.write(content);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -777,8 +759,7 @@ public class FileUtils {
 	 *            文件名
 	 * @throws IOException
 	 */
-	public static String createFile(Class<?> clazz, String fileName)
-			throws IOException {
+	public static String createFile(Class<?> clazz, String fileName) throws IOException {
 		String path = clazz.getName();
 		System.out.println(clazz.getName() + "   " + fileName);
 		path = path.replaceAll("[.]", "\\\\");
@@ -805,8 +786,7 @@ public class FileUtils {
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
-	public static synchronized void appendContent(String filePath,
-			String content) {
+	public static synchronized void appendContent(String filePath, String content) {
 		try (FileWriter writer = new FileWriter(filePath, true);) {
 			writer.write(content);
 		} catch (IOException e1) {
@@ -817,22 +797,19 @@ public class FileUtils {
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
-	public static synchronized void appendContent(String filePath,
-			String content, int row) {
+	public static synchronized void appendContent(String filePath, String content, int row) {
 		File file = new File(filePath);
 		if (!file.exists()) {
 			FileUtils.createFile(filePath);
 		}
-		String fileContent = FileUtils.getStringByFilePath(filePath, row,
-				content);
+		String fileContent = FileUtils.getStringByFilePath(filePath, row, content);
 		FileUtils.writeContent(filePath, fileContent);
 	}
 
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
-	public static synchronized void writeContent(String filePath,
-			String content) {
+	public static synchronized void writeContent(String filePath, String content) {
 		try (FileWriter writer = new FileWriter(filePath, false);) {
 			writer.write(content);
 		} catch (IOException e1) {
@@ -843,10 +820,9 @@ public class FileUtils {
 	/**
 	 * // 打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
 	 */
-	public static synchronized void writeContent(String filePath,
-			String content, String charset) {
-		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(
-				filePath), charset); BufferedWriter bWriter = new BufferedWriter(osw)) {
+	public static synchronized void writeContent(String filePath, String content, String charset) {
+		try (OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(filePath), charset);
+				BufferedWriter bWriter = new BufferedWriter(osw)) {
 			osw.write(content);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -866,19 +842,16 @@ public class FileUtils {
 	 *            集合-》所有行位置
 	 * @return 新的文件内容
 	 */
-	public static String modifyLineContent(String path, String prefix,
-			String suffix, Set<Integer> row) {
+	public static String modifyLineContent(String path, String prefix, String suffix, Set<Integer> row) {
 		String line;
 		StringBuffer html = new StringBuffer("");
 		int index = 0;
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				index++;
 				if (row.contains(index)) {
-					html = html.append(prefix).append(line).append(suffix)
-							.append("\r\n");
+					html = html.append(prefix).append(line).append(suffix).append("\r\n");
 				} else {
 					html = html.append(line).append("\r\n");
 				}
@@ -904,19 +877,16 @@ public class FileUtils {
 	 * @param endRow
 	 * @return 新的文件内容
 	 */
-	public static String modifyLineContent(String path, String prefix,
-			String suffix, int startRow, int endRow) {
+	public static String modifyLineContent(String path, String prefix, String suffix, int startRow, int endRow) {
 		String line;
 		StringBuffer html = new StringBuffer("");
 		int index = 0;
-		try (InputStreamReader read = new InputStreamReader(
-				new FileInputStream(path), "utf-8");
+		try (InputStreamReader read = new InputStreamReader(new FileInputStream(path), "utf-8");
 				BufferedReader reader = new BufferedReader(read);) {
 			while ((line = reader.readLine()) != null) {
 				index++;
 				if (index <= endRow && index >= startRow) {
-					line = line.replaceFirst("((\\s)*)(.*)", "$1" + prefix
-							+ "$3");
+					line = line.replaceFirst("((\\s)*)(.*)", "$1" + prefix + "$3");
 					html = html.append(line).append(suffix).append("\r\n");
 				} else {
 					html = html.append(line).append("\r\n");
@@ -983,21 +953,20 @@ public class FileUtils {
 	}
 
 	/**
-	 *  把byte数组写出到文件
+	 * 把byte数组写出到文件
+	 * 
 	 * @param filename
 	 * @param data
 	 * @throws IOException
 	 */
-	static public void writeFile(String filename, byte data[])
-			throws IOException {
+	static public void writeFile(String filename, byte data[]) throws IOException {
 		createFile(filename);
 		try (FileOutputStream fout = new FileOutputStream(filename);) {
 			fout.write(data);
 		}
 	}
 
-	public static File inputStream2File(String fileName, InputStream is)
-			throws Exception {
+	public static File inputStream2File(String fileName, InputStream is) throws Exception {
 		File file = new File(fileName);
 		try (OutputStream os = new FileOutputStream(file);) {
 			byte buffer[] = new byte[1024];
@@ -1024,8 +993,7 @@ public class FileUtils {
 			File file = new File(filepath);
 			File zipFile = new File(zippath);
 			InputStream input = new FileInputStream(file);
-			ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(
-					zipFile));
+			ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
 			zipOut.putNextEntry(new ZipEntry(file.getName()));
 			int temp = 0;
 			while ((temp = input.read()) != -1) {
@@ -1047,14 +1015,12 @@ public class FileUtils {
 			File file = new File(filepath);// 要被压缩的文件夹
 			File zipFile = new File(zippath);
 			InputStream input = null;
-			ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(
-					zipFile));
+			ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
 			if (file.isDirectory()) {
 				File[] files = file.listFiles();
 				for (int i = 0; i < files.length; ++i) {
 					input = new FileInputStream(files[i]);
-					zipOut.putNextEntry(new ZipEntry(file.getName()
-							+ File.separator + files[i].getName()));
+					zipOut.putNextEntry(new ZipEntry(file.getName() + File.separator + files[i].getName()));
 					int temp = 0;
 					while ((temp = input.read()) != -1) {
 						zipOut.write(temp);
@@ -1071,8 +1037,7 @@ public class FileUtils {
 	/**
 	 * 应用： ZipContraFile("d:/hello.zip","d:/eee.txt", "hello.txt"); 解压缩（解压缩单个文件）
 	 */
-	public static void ZipContraFile(String zippath, String outfilepath,
-			String filename) {
+	public static void ZipContraFile(String zippath, String outfilepath, String filename) {
 		File file = new File(zippath);// 压缩文件路径和文件名
 		File outFile = new File(outfilepath);// 解压后路径和文件名
 		try (java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);) {
@@ -1094,20 +1059,18 @@ public class FileUtils {
 	 * 当我们需要解压缩多个文件的时候，ZipEntry就无法使用了， 如果想操作更加复杂的压缩文件，我们就必须使用ZipInputStream类
 	 * ZipContraMultiFile("f:/zippath.zip", "d:/");
 	 * ZipContraMultiFile("d:/hello.zip", "d:/");
-	 * */
+	 */
 	public static void ZipContraMultiFile(String zippath, String outzippath) {
 		File file = new File(zippath);
 		File outFile = null;
 		try (java.util.zip.ZipFile zipFile = new java.util.zip.ZipFile(file);
-				ZipInputStream zipInput = new ZipInputStream(new FileInputStream(
-						file));) {
+				ZipInputStream zipInput = new ZipInputStream(new FileInputStream(file));) {
 			ZipEntry entry = null;
 			InputStream input = null;
 			OutputStream output = null;
 			while ((entry = zipInput.getNextEntry()) != null) {
 				StringUtils.errorln("解压缩" + entry.getName() + "文件");
-				outFile = new File(outzippath + File.separator
-						+ entry.getName());
+				outFile = new File(outzippath + File.separator + entry.getName());
 				if (!outFile.getParentFile().exists()) {
 					outFile.getParentFile().mkdir();
 				}
@@ -1130,19 +1093,20 @@ public class FileUtils {
 
 	/**
 	 * 将文件读入至字节数组,文件路径是指项目资源路径
+	 * 
 	 * @param filePath
 	 * @return
 	 * @throws IOException
 	 */
 	public static byte[] file2byte(String filePath) throws IOException {
-		try (InputStream in = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(filePath);) {
+		try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);) {
 			return toByteArray(in);
 		}
 	}
 
 	/**
 	 * 将文件读入至字节数组,文件路径是指服务器文件系统路径
+	 * 
 	 * @param filePath
 	 * @return
 	 * @throws IOException
@@ -1153,7 +1117,7 @@ public class FileUtils {
 		}
 	}
 
-	//inputStream转outputStream
+	// inputStream转outputStream
 	public static ByteArrayOutputStream parse(InputStream in) throws Exception {
 		ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
 		int ch;
@@ -1163,7 +1127,7 @@ public class FileUtils {
 		return swapStream;
 	}
 
-	//outputStream转inputStream
+	// outputStream转inputStream
 	public static ByteArrayInputStream parse(OutputStream out) throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		baos = (ByteArrayOutputStream) out;
@@ -1173,6 +1137,7 @@ public class FileUtils {
 
 	/**
 	 * 字节到文件。
+	 * 
 	 * @param buf
 	 * @param filePath
 	 * @param fileName
@@ -1209,8 +1174,10 @@ public class FileUtils {
 			}
 		}
 	}
+
 	/**
 	 * 字节到文件。
+	 * 
 	 * @param buf
 	 * @param filePath
 	 * @param fileName
@@ -1241,6 +1208,7 @@ public class FileUtils {
 			}
 		}
 	}
+
 	// 把文件读入byte数组
 	static public byte[] readFile(String filename) throws IOException {
 		File file = new File(filename);
@@ -1249,32 +1217,31 @@ public class FileUtils {
 		try (FileInputStream fin = new FileInputStream(file);) {
 			int r = fin.read(data);
 			if (r != len)
-				throw new IOException("Only read " + r + " of " + len + " for "
-						+ file);
+				throw new IOException("Only read " + r + " of " + len + " for " + file);
 		}
 		return data;
 	}
 
 	/**
 	 * 将文件写入流中
+	 * 
 	 * @param filePath
 	 * @return
 	 */
 	public static InputStream file2inputStream(String filePath) {
-		InputStream in = Thread.currentThread().getContextClassLoader()
-				.getResourceAsStream(filePath);
+		InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
 		return in;
 	}
 
 	/**
 	 * 流转字节数组
+	 * 
 	 * @param in
 	 * @return
 	 * @throws IOException
 	 */
 	public static byte[] toByteArray(InputStream in) throws IOException {
-		try (
-				ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+		try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			byte[] buffer = new byte[1024 * 4];
 			int n = 0;
 			while ((n = in.read(buffer)) != -1) {
@@ -1286,6 +1253,7 @@ public class FileUtils {
 
 	/**
 	 * 从流中获取
+	 * 
 	 * @param in
 	 * @return
 	 */
@@ -1308,8 +1276,11 @@ public class FileUtils {
 
 	/**
 	 * 遍历一个目录下的文件，深层次
-	 * @param configPath 文件夹目录路径
-	 * @param filter 过滤器
+	 * 
+	 * @param configPath
+	 *            文件夹目录路径
+	 * @param filter
+	 *            过滤器
 	 * @return
 	 */
 	public static List<File> traverseDir(String configPath, FilenameFilter filter) {
@@ -1338,8 +1309,7 @@ public class FileUtils {
 	 * @param inputStream
 	 * @param outputStream
 	 */
-	public static void parse(InputStream inputStream,
-			OutputStream outputStream) {
+	public static void parse(InputStream inputStream, OutputStream outputStream) {
 		byte buffer[] = new byte[10240];
 		int len = 0;
 		try {
@@ -1373,7 +1343,7 @@ public class FileUtils {
 				}
 				NumberFormat nf = NumberFormat.getNumberInstance();
 				nf.setMaximumFractionDigits(2);
-				//				DecimalFormat df = new DecimalFormat("#.00");
+				// DecimalFormat df = new DecimalFormat("#.00");
 				return nf.format(length) + ch[i];
 			}
 		}
@@ -1382,6 +1352,7 @@ public class FileUtils {
 
 	/**
 	 * 获取文件的Md5值
+	 * 
 	 * @param path
 	 * @return
 	 * @throws Exception
@@ -1389,9 +1360,8 @@ public class FileUtils {
 	public static String getMD5(String path) throws Exception {
 		String strMD5 = null;
 		File file = new File(path);
-		try (
-				FileInputStream in = new FileInputStream(file);) {
-			MappedByteBuffer buffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+		try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel();) {
+			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 			MessageDigest digest = MessageDigest.getInstance("md5");
 			digest.update(buffer);
 			byte[] byteArr = digest.digest();
@@ -1400,17 +1370,18 @@ public class FileUtils {
 		}
 		return strMD5;
 	}
+
 	/**
 	 * 获取文件的Md5值
+	 * 
 	 * @param path
 	 * @return
 	 * @throws Exception
 	 */
 	public static String getMD5(File file) throws Exception {
 		String strMD5 = null;
-		try (
-				FileInputStream in = new FileInputStream(file);) {
-			MappedByteBuffer buffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+		try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel();) {
+			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
 			MessageDigest digest = MessageDigest.getInstance("md5");
 			digest.update(buffer);
 			byte[] byteArr = digest.digest();
@@ -1419,6 +1390,7 @@ public class FileUtils {
 		}
 		return strMD5;
 	}
+
 	static String getMD54ByteArray(String path) throws Exception {
 		String strMD5 = null;
 		MessageDigest digest = MessageDigest.getInstance("md5");
@@ -1434,37 +1406,41 @@ public class FileUtils {
 		return strMD5;
 	}
 
-	/** 
-	 * 创建固定大小的文件 
-	 * @param file 
-	 * @param length 
-	 * @throws IOException  
+	/**
+	 * 创建固定大小的文件
+	 * 
+	 * @param file
+	 * @param length
+	 * @throws IOException
 	 */
 	public static void createFixLengthFile1(File file, long length) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(file);
-				FileChannel output = fos.getChannel();) {
+		try (FileOutputStream fos = new FileOutputStream(file); FileChannel output = fos.getChannel();) {
 			output.write(ByteBuffer.allocate(1), length - 1);
 		}
 	}
 
-	/** 
-	 * 创建固定大小的文件 
-	 * @param file 
-	 * @param length 
-	 * @throws IOException  
+	/**
+	 * 创建固定大小的文件
+	 * 
+	 * @param file
+	 * @param length
+	 * @throws IOException
 	 */
 	public static void createFixLengthFile2(File file, long length) throws IOException {
-		try (
-				RandomAccessFile r = new RandomAccessFile(file, "rw");) {
+		try (RandomAccessFile r = new RandomAccessFile(file, "rw");) {
 			r.setLength(length);
 		}
 	}
 
 	/**
 	 * 字节写入到文件指定位置。
-	 * @param file  文件
-	 * @param position  位置下标
-	 * @param b  字节
+	 * 
+	 * @param file
+	 *            文件
+	 * @param position
+	 *            位置下标
+	 * @param b
+	 *            字节
 	 */
 	public static void writeFile(File file, long position, byte[] b) {
 		try (RandomAccessFile raf = new RandomAccessFile(file, "rw");) {
@@ -1474,54 +1450,64 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 	}
+
 	public static void main(String[] args) {
 		try {
-//			encode("C:/Workspaces/harry12800.develper.rar", "C:/Workspaces/harry12800.develper.txt");
-//			encode("C:/Workspaces/harry12800.tools.rar", "C:/Workspaces/harry12800.tools.txt");
-//			encode("C:/Workspaces/dev-docs.zip", "C:/Workspaces/dev-docs.zip.txt");
+			// encode("C:/Workspaces/harry12800.develper.rar",
+			// "C:/Workspaces/harry12800.develper.txt");
+			// encode("C:/Workspaces/harry12800.tools.rar",
+			// "C:/Workspaces/harry12800.tools.txt");
+			// encode("C:/Workspaces/dev-docs.zip",
+			// "C:/Workspaces/dev-docs.zip.txt");
 			decode("C:/Users/harry12800/Desktop/docs.txt", "C:/Users/harry12800/Desktop/docs.rar");
-//			decode("C:/Workspaces/harry12800.tools.txt", "C:/Workspaces/b.rar");
-//			decode("C:/Workspaces/dev-docs.zip.txt", "C:/Workspaces/c.zip");
+			// decode("C:/Workspaces/harry12800.tools.txt",
+			// "C:/Workspaces/b.rar");
+			// decode("C:/Workspaces/dev-docs.zip.txt", "C:/Workspaces/c.zip");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 *  文件加密
+	 * 文件加密
+	 * 
 	 * @param path
 	 * @param outPath
 	 * @throws IOException
 	 */
-	public static void encode(String path,String outPath) throws IOException {
+	public static void encode(String path, String outPath) throws IOException {
 		byte[] bytes = file2byte1(path);
-		int i  = 0 ;
+		int i = 0;
 		for (byte b : bytes) {
-//			printByte(b);
+			// printByte(b);
 			bytes[i++] = exchange((byte) ~b);
-//			printByte((byte) ~b);
-//			printByte( exchange((byte) ~b));
-//			System.out.println();
+			// printByte((byte) ~b);
+			// printByte( exchange((byte) ~b));
+			// System.out.println();
 		}
 		byte2File(bytes, outPath);
-		
+
 	}
+
 	/**
 	 * 文件解密
+	 * 
 	 * @param path
 	 * @param outPath
 	 * @throws IOException
 	 */
-	public static void decode(String path,String outPath) throws IOException {
+	public static void decode(String path, String outPath) throws IOException {
 		byte[] bytes = file2byte1(path);
-		int i  = 0 ;
+		int i = 0;
 		for (byte b : bytes) {
 			bytes[i++] = (byte) ~exchange(b);
 		}
 		byte2File(bytes, outPath);
 	}
+
 	/**
 	 * Aj45
+	 * 
 	 * @param i
 	 * @return
 	 */
@@ -1530,29 +1516,29 @@ public class FileUtils {
 		int bit2 = (i >> 6) & 1;
 		int bit3 = (i >> 5) & 1;
 		int bit6 = (i >> 2) & 1;
-//		System.out.println(bit1);
-//		System.out.println(bit2);
-//		System.out.println(bit3);
-//		System.out.println(bit6);
+		// System.out.println(bit1);
+		// System.out.println(bit2);
+		// System.out.println(bit3);
+		// System.out.println(bit6);
 		if (bit1 == 1)
 			i = (byte) (i | 0x20);
 		else
-			i = (byte) (i & 0xDF);//11011111
+			i = (byte) (i & 0xDF);// 11011111
 		if (bit2 == 1)
 			i = (byte) (i | 0x04);
 		else
-			i = (byte) (i & 0xFB);//11111011
+			i = (byte) (i & 0xFB);// 11111011
 		if (bit3 == 1)
 			i = (byte) (i | 0x80);
 		else
-			i = (byte) (i & 0x7F);//01111111
+			i = (byte) (i & 0x7F);// 01111111
 		if (bit6 == 1)
 			i = (byte) (i | 0x40);
 		else
-			i = (byte) (i & 0xBF);//10111111
+			i = (byte) (i & 0xBF);// 10111111
 		return i;
 	}
-	 
+
 	public static void printByte(byte a) {
 		int y = a;
 		int x = 8;
@@ -1562,5 +1548,4 @@ public class FileUtils {
 		}
 		System.out.println();
 	}
-} 
-		
+}
