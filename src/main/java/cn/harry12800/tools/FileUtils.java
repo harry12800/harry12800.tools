@@ -20,9 +20,9 @@ import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1357,38 +1357,53 @@ public class FileUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getMD5(String path) throws Exception {
-		String strMD5 = null;
-		File file = new File(path);
-		try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel();) {
-			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-			MessageDigest digest = MessageDigest.getInstance("md5");
-			digest.update(buffer);
-			byte[] byteArr = digest.digest();
-			BigInteger bigInteger = new BigInteger(1, byteArr);
-			strMD5 = bigInteger.toString(16);
-		}
-		return strMD5;
-	}
-
+	public static String getMD5(String path) {
+        BigInteger bi = null;
+        try {
+            byte[] buffer = new byte[8192];
+            int len = 0;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            File f = new File(path);
+            FileInputStream fis = new FileInputStream(f);
+            while ((len = fis.read(buffer)) != -1) {
+                md.update(buffer, 0, len);
+            }
+            fis.close();
+            byte[] b = md.digest();
+            bi = new BigInteger(1, b);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bi.toString(16);
+    }
 	/**
 	 * 获取文件的Md5值
 	 * 
-	 * @param path
+	 * @param f
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getMD5(File file) throws Exception {
-		String strMD5 = null;
-		try (FileInputStream in = new FileInputStream(file); FileChannel channel = in.getChannel();) {
-			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-			MessageDigest digest = MessageDigest.getInstance("md5");
-			digest.update(buffer);
-			byte[] byteArr = digest.digest();
-			BigInteger bigInteger = new BigInteger(1, byteArr);
-			strMD5 = bigInteger.toString(16);
-		}
-		return strMD5;
+	public static String getMD5(File f) throws Exception {
+		BigInteger bi = null;
+        try {
+            byte[] buffer = new byte[8192];
+            int len = 0;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            FileInputStream fis = new FileInputStream(f);
+            while ((len = fis.read(buffer)) != -1) {
+                md.update(buffer, 0, len);
+            }
+            fis.close();
+            byte[] b = md.digest();
+            bi = new BigInteger(1, b);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bi.toString(16);
 	}
 
 	static String getMD54ByteArray(String path) throws Exception {
