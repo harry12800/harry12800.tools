@@ -127,6 +127,27 @@ public class MachineUtils {
 		workspace = workspace.replaceAll("\\\\", "/");
 		return workspace;
 	}
+	
+	public static String getHomePath(Class<?> clazzname) {
+		boolean byClass = MachineUtils.getByClass(clazzname);
+		String homePath = "";
+		if (byClass) {
+			String clazz = System.getProperty("sun.java.command");
+			System.err.println("sun.java.command: " + clazz);
+			File file = new File(clazz);
+			// MachineUtils.printSystemProperties();
+			if (file.exists()) {
+				File file2 = new File(file.getAbsolutePath());
+				File parentFile = file2.getParentFile();
+				homePath = parentFile.getAbsolutePath();
+			} else {
+				homePath = System.getProperty("user.dir");
+			}
+		} else {
+			homePath = System.getProperty("user.dir");
+		}
+		return homePath;
+	}
 
 	/**
 	 * 得到电脑最大剩余空间的磁盘路径
