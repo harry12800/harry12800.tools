@@ -1303,6 +1303,35 @@ public class FileUtils {
 			return lists;
 		}
 	}
+	/**
+	 * 遍历一个目录下的文件，深层次
+	 * 
+	 * @param configPath
+	 *            文件夹目录路径
+	 * @param filter
+	 *            过滤器
+	 * @return
+	 */
+	public static List<File> traverseDir(String configPath) {
+		File file = new File(configPath);
+		List<File> lists = Lists.newArrayList();
+		if (file == null || file.isFile()) {
+			return lists;
+		} else {
+
+			File[] listFiles = file.listFiles();
+			if (listFiles != null)
+				for (File file2 : listFiles) {
+					if (file2.isFile()) {
+						lists.add(file2);
+					}
+					if (file2.isDirectory()) {
+						lists.addAll(traverseDir(file2.getAbsolutePath()));
+					}
+				}
+			return lists;
+		}
+	}
 
 	/**
 	 * 
