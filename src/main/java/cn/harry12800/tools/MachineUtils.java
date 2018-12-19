@@ -315,6 +315,7 @@ public class MachineUtils {
 		while ((line = in.readLine()) != null) {
 			sb.append(line).append("\r\n");
 		}
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
 
