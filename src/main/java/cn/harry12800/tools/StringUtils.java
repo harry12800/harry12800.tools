@@ -23,8 +23,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
@@ -44,8 +46,7 @@ public class StringUtils {
 	static Properties props = new Properties();
 	static {
 		try {
-			InputStream in = StringUtils.class
-					.getResourceAsStream("/cn/harry12800/tools/StringUtils.properties");
+			InputStream in = StringUtils.class.getResourceAsStream("/cn/harry12800/tools/StringUtils.properties");
 			if (in != null)
 				props.load(in);
 		} catch (IOException e) {
@@ -53,7 +54,76 @@ public class StringUtils {
 	}
 
 	/**
+	 * 将string按需要格式化,前面加缩进符,后面加换行符
+	 * 
+	 * @param tabNum
+	 *            缩进量
+	 * @param srcString
+	 * @return
+	 */
+	public static String formatSingleLine(int tabNum, String srcString) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < tabNum; i++) {
+			sb.append("\t");
+		}
+		sb.append(srcString);
+		sb.append("\n");
+		return sb.toString();
+	}
+
+	public static String firstToUpperCase(String key) {
+		return key.substring(0, 1).toUpperCase(Locale.CHINA) + key.substring(1);
+	}
+
+	public static String gapToCamel(String src) {
+		StringBuilder sb = new StringBuilder();
+		for (String s : src.trim().split(" ")) {
+			sb.append(firstToUpperCase(s));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 驼峰转下划线命名
+	 */
+	public static String camelTo_(String src) {
+		StringBuilder sb = new StringBuilder();
+		StringBuilder sbWord = new StringBuilder();
+		char[] chars = src.trim().toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			char c = chars[i];
+			if (c >= 'A' && c <= 'Z') {
+				// 一旦遇到大写单词，保存之前已有字符组成的单词
+				if (sbWord.length() > 0) {
+					if (sb.length() > 0) {
+						sb.append("_");
+					}
+					sb.append(sbWord.toString());
+				}
+				sbWord = new StringBuilder();
+			}
+			sbWord.append(c);
+		}
+
+		if (sbWord.length() > 0) {
+			if (sb.length() > 0) {
+				sb.append("_");
+			}
+			sb.append(sbWord.toString());
+		}
+
+		return sb.toString();
+	}
+
+	public static boolean hasChinese(String s) {
+		String regexChinese = "[\u4e00-\u9fa5]+";
+		Pattern patternChinese = Pattern.compile(regexChinese);
+		return patternChinese.matcher(s).find();
+	}
+
+	/**
 	 * MD5值计算
+	 * 
 	 * @param sourceStr
 	 * @return
 	 */
@@ -74,8 +144,9 @@ public class StringUtils {
 				buf.append(Integer.toHexString(i));
 			}
 			result = buf.toString();
-			//            System.out.println("MD5(" + sourceStr + ",32) = " + result);
-			//            System.out.println("MD5(" + sourceStr + ",16) = " + buf.toString().substring(8, 24));
+			// System.out.println("MD5(" + sourceStr + ",32) = " + result);
+			// System.out.println("MD5(" + sourceStr + ",16) = " +
+			// buf.toString().substring(8, 24));
 		} catch (NoSuchAlgorithmException e) {
 			System.out.println(e);
 		}
@@ -123,14 +194,9 @@ public class StringUtils {
 			int size = 998;
 			int count = (length / size) + 1;
 			for (int i = 0; i < count - 1; i++) {
-				str = str + columnName + " in "
-						+ List2String(list.subList(i * size, (i + 1) * size))
-						+ " or ";
+				str = str + columnName + " in " + List2String(list.subList(i * size, (i + 1) * size)) + " or ";
 			}
-			str = str
-					+ columnName
-					+ " in "
-					+ List2String(list.subList((count - 1) * size, list.size()));
+			str = str + columnName + " in " + List2String(list.subList((count - 1) * size, list.size()));
 		}
 		return str;
 	}
@@ -141,8 +207,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String getCurrentTime() {
-		return new Timestamp(System.currentTimeMillis()).toString().substring(
-				0, 19);
+		return new Timestamp(System.currentTimeMillis()).toString().substring(0, 19);
 	}
 
 	/**
@@ -151,8 +216,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String getCurrentDate() {
-		return new Timestamp(System.currentTimeMillis()).toString().substring(
-				0, 10);
+		return new Timestamp(System.currentTimeMillis()).toString().substring(0, 10);
 	}
 
 	/**
@@ -161,8 +225,8 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String getCurrentMonth() {
-		return (new Timestamp(System.currentTimeMillis()).toString().substring(
-				0, 10)).replaceAll("-", "").substring(0, 6);
+		return (new Timestamp(System.currentTimeMillis()).toString().substring(0, 10)).replaceAll("-", "").substring(0,
+				6);
 	}
 
 	/**
@@ -172,14 +236,13 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String getBeforeDate(int day) {
-		return new Timestamp(System.currentTimeMillis() - day * 24 * 60 * 60
-				* 1000).toString().substring(0, 10);
+		return new Timestamp(System.currentTimeMillis() - day * 24 * 60 * 60 * 1000).toString().substring(0, 10);
 	}
 
 	/**
 	 * 
-	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c"
-	 * 拼凑后的结果是：" fieldName in ('a','b','c') ";
+	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c" 拼凑后的结果是：
+	 * " fieldName in ('a','b','c') ";
 	 * <p style="color:'red';">
 	 * 特别注意 其中的or语句
 	 * </p>
@@ -195,8 +258,7 @@ public class StringUtils {
 		for (String key : codes) {
 			i++;
 			if (i % 999 == 0) {
-				str.deleteCharAt(str.length() - 1).append(
-						") or " + fieldName + " in (");
+				str.deleteCharAt(str.length() - 1).append(") or " + fieldName + " in (");
 			}
 			str.append("'").append(key).append("',");
 		}
@@ -219,8 +281,7 @@ public class StringUtils {
 		for (String key : codes) {
 			i++;
 			if (i % 999 == 0) {
-				str.deleteCharAt(str.length() - 1).append(
-						") and " + fieldName + " not in (");
+				str.deleteCharAt(str.length() - 1).append(") and " + fieldName + " not in (");
 			}
 			str.append("'").append(key).append("',");
 		}
@@ -231,8 +292,8 @@ public class StringUtils {
 
 	/**
 	 * 
-	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c"
-	 * 拼凑后的结果是：" fieldName in ('a','b','c') ";
+	 * 将list拼凑成Sql中的形势，例如 list中有字符串 字样 "a","b","c" 拼凑后的结果是：
+	 * " fieldName in ('a','b','c') ";
 	 * <p style="color:'red';">
 	 * 特别注意 其中的or语句
 	 * </p>
@@ -248,8 +309,7 @@ public class StringUtils {
 		for (String key : codes) {
 			i++;
 			if (i % 999 == 0) {
-				str.deleteCharAt(str.length() - 1).append(
-						") or " + fieldName + " in (");
+				str.deleteCharAt(str.length() - 1).append(") or " + fieldName + " in (");
 			}
 			str.append("'").append(key).append("',");
 		}
@@ -372,21 +432,19 @@ public class StringUtils {
 	 * @return Json字符串数据
 	 */
 	@SuppressWarnings("unchecked")
-	public static String getJsonForMapTree(List<Map<String, Object>> list,
-			Map<String, String> cols, String id, String parentid) {
+	public static String getJsonForMapTree(List<Map<String, Object>> list, Map<String, String> cols, String id,
+			String parentid) {
 		/**
 		 * 建立预处理数据
 		 */
-		Map<String, Map<String, Object>> cache = new LinkedHashMap<String, Map<String, Object>>(
-				0);
+		Map<String, Map<String, Object>> cache = new LinkedHashMap<String, Map<String, Object>>(0);
 		for (Map<String, Object> map : list) {
 			cache.put(map.get(id) + "", map);
 		}
 		/**
 		 * 找到根节点
 		 */
-		List<Map<String, Object>> rootList = new ArrayList<Map<String, Object>>(
-				0);
+		List<Map<String, Object>> rootList = new ArrayList<Map<String, Object>>(0);
 
 		/**
 		 * 遍历预处理数据
@@ -400,13 +458,11 @@ public class StringUtils {
 			}
 			// 如果有父级节点的情况
 			if (null == tmp.get("child_tmp")) {
-				ArrayList<Map<String, Object>> childList = new ArrayList<Map<String, Object>>(
-						0);
+				ArrayList<Map<String, Object>> childList = new ArrayList<Map<String, Object>>(0);
 				childList.add(entry.getValue());
 				tmp.put("child_tmp", childList);
 			} else {
-				((ArrayList<Map<String, Object>>) (tmp.get("child_tmp")))
-						.add(entry.getValue());
+				((ArrayList<Map<String, Object>>) (tmp.get("child_tmp"))).add(entry.getValue());
 			}
 		}
 		if (rootList == null || rootList.isEmpty()) {
@@ -428,16 +484,13 @@ public class StringUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static String realWith(Map<String, Object> rootMap,
-			Map<String, String> cols) {
+	private static String realWith(Map<String, Object> rootMap, Map<String, String> cols) {
 		StringBuffer json = new StringBuffer("{");
 		for (Entry<String, String> col : cols.entrySet())
 			// 添加属性值
-			json.append(col.getValue() + ":'" + rootMap.get(col.getKey())
-					+ "',");
+			json.append(col.getValue() + ":'" + rootMap.get(col.getKey()) + "',");
 		/* 添加孩子 */
-		ArrayList<Map<String, Object>> childList = (ArrayList<Map<String, Object>>) rootMap
-				.get("child_tmp");
+		ArrayList<Map<String, Object>> childList = (ArrayList<Map<String, Object>>) rootMap.get("child_tmp");
 		if (null == childList || childList.isEmpty())
 			return json.substring(0, json.length() - 1) + "}";
 		json.append("child:[");
@@ -530,8 +583,7 @@ public class StringUtils {
 			flag = true;
 		else if (obj instanceof Map && ((Map<?, ?>) obj).isEmpty())// 没装数据的Map
 			flag = true;
-		else if ("".equals((obj + "").trim())
-				|| "null".equals((obj + "").trim()))// 字符串判断
+		else if ("".equals((obj + "").trim()) || "null".equals((obj + "").trim()))// 字符串判断
 			flag = true;
 		else if (obj.getClass().isArray() && Array.getLength(obj) <= 0) {// 数组判断
 			flag = true;
@@ -562,8 +614,7 @@ public class StringUtils {
 		connection.setDoOutput(true);
 		connection.connect();
 		String content = "";
-		try (DataOutputStream out = new DataOutputStream(
-				connection.getOutputStream());) {
+		try (DataOutputStream out = new DataOutputStream(connection.getOutputStream());) {
 			out.writeBytes(content);
 		}
 		// String content = "user=" +
@@ -574,8 +625,7 @@ public class StringUtils {
 		// content += "&contents=" + URLEncoder.encode(smsdesc, "UTF-8");
 		int responseCode = connection.getResponseCode();
 		StringUtils.errorln(responseCode);
-		try (InputStreamReader inputStreamReader = new InputStreamReader(
-				connection.getInputStream());
+		try (InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
 				BufferedReader br = new BufferedReader(inputStreamReader);) {
 			StringBuffer sb = new StringBuffer();
 			String str;
@@ -592,8 +642,7 @@ public class StringUtils {
 	 * @param val
 	 * @return
 	 */
-	public static String getStringByUrl(String urlPath, Map<String, String> val)
-			throws Exception {
+	public static String getStringByUrl(String urlPath, Map<String, String> val) throws Exception {
 		URL url = new URL(urlPath);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
@@ -601,12 +650,10 @@ public class StringUtils {
 		connection.setUseCaches(false);
 		connection.setDoOutput(true);
 		connection.connect();
-		DataOutputStream out = new DataOutputStream(
-				connection.getOutputStream());
+		DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 		StringBuilder content = new StringBuilder();
 		for (Entry<String, String> map : val.entrySet()) {
-			content.append("&" + map.getKey() + "="
-					+ URLEncoder.encode(map.getValue(), "UTF-8"));
+			content.append("&" + map.getKey() + "=" + URLEncoder.encode(map.getValue(), "UTF-8"));
 		}
 		if (content.length() > 0)
 			content.deleteCharAt(0);
@@ -615,8 +662,7 @@ public class StringUtils {
 		out.close();
 		int responseCode = connection.getResponseCode();
 		StringUtils.errorln(responseCode);
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				connection.getInputStream(), "GBK"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GBK"));
 		StringBuffer sb = new StringBuffer();
 		String str;
 		while ((str = br.readLine()) != null) {
@@ -655,8 +701,7 @@ public class StringUtils {
 	 * @param splitStr
 	 * @return
 	 */
-	public static String getSearchByLikeInStr(String fieldName,
-			String whereStr, String splitStr) {
+	public static String getSearchByLikeInStr(String fieldName, String whereStr, String splitStr) {
 		String extendsSqlStr = " and (";
 		String[] fieldValues = whereStr.split(splitStr);
 		for (int i = 0; i < fieldValues.length; i++) {
@@ -705,8 +750,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String getCronByDateStr(String dateStr) {
-		Date date = StringUtils.string2date(dateStr,
-				StringUtils.yyyy_MM_dd_HH_mm_ss);
+		Date date = StringUtils.string2date(dateStr, StringUtils.yyyy_MM_dd_HH_mm_ss);
 		String dateFormat = "ss mm HH dd MM ? yyyy";
 		return formatDateByPattern(date, dateFormat);
 	}
@@ -731,7 +775,7 @@ public class StringUtils {
 	}
 
 	public static boolean isEmpty(Object obj) {
-		return (obj == null) ? true : false;
+		return obj == null;
 	}
 
 	/**
@@ -740,12 +784,8 @@ public class StringUtils {
 	 * @return
 	 */
 	public static boolean isEmpty(String obj) {
-		if (obj == null || "".equals(obj) || "undefined".equals(obj)
-				|| "null".equals(obj) || "NULL".equals(obj)) {
-			return true;
-		} else {
-			return false;
-		}
+		return obj == null || obj.length() == 0 || "undefined".equals(obj) || "null".equals(obj) || "NULL".equals(obj);
+
 	}
 
 	/**
@@ -810,8 +850,7 @@ public class StringUtils {
 	 *            日期格式
 	 * @return
 	 */
-	public static java.sql.Date string2BySqldate(String source,
-			String dateFormat) {
+	public static java.sql.Date string2BySqldate(String source, String dateFormat) {
 		Date d = null;
 		if (isEmpty(source)) {
 			return null;
@@ -833,8 +872,7 @@ public class StringUtils {
 	 * @param k
 	 * @return
 	 */
-	public static String dateBySqlToString(java.sql.Date dateDate,
-			String dateFormat) {
+	public static String dateBySqlToString(java.sql.Date dateDate, String dateFormat) {
 		SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 		String dateString = formatter.format(dateDate);
 		return dateString;
@@ -848,11 +886,9 @@ public class StringUtils {
 	 * @param roundingMode
 	 * @return
 	 */
-	public static String doubleByEstr(String doubleStr, int newScale,
-			int roundingMode) {
+	public static String doubleByEstr(String doubleStr, int newScale, int roundingMode) {
 		BigDecimal bigDecilmal = new BigDecimal(doubleStr);
-		doubleStr = bigDecilmal.setScale(newScale, roundingMode)
-				.toPlainString();
+		doubleStr = bigDecilmal.setScale(newScale, roundingMode).toPlainString();
 		return doubleStr;
 	}
 
@@ -877,8 +913,7 @@ public class StringUtils {
 	 * @param roundingMode
 	 * @return
 	 */
-	public static double doubleByEDouble(String doubleStr, int newScale,
-			int roundingMode) {
+	public static double doubleByEDouble(String doubleStr, int newScale, int roundingMode) {
 		BigDecimal bigDecilmal = new BigDecimal(doubleStr);
 		bigDecilmal.setScale(newScale, roundingMode);
 		return bigDecilmal.doubleValue();
@@ -895,8 +930,7 @@ public class StringUtils {
 		if (str.length() <= len || len <= 4)
 			return str;
 		else if (str.length() > len) {
-			return str.substring(0, len / 2 - 2) + "...."
-					+ str.substring(str.length() - len / 2 + 2);
+			return str.substring(0, len / 2 - 2) + "...." + str.substring(str.length() - len / 2 + 2);
 		}
 		return str;
 	}
@@ -985,6 +1019,7 @@ public class StringUtils {
 
 	/**
 	 * 去掉标点符号切割
+	 * 
 	 * @param content
 	 * @return
 	 */
@@ -1002,6 +1037,7 @@ public class StringUtils {
 
 	/**
 	 * 计算字符串相似度
+	 * 
 	 * @param str1
 	 * @param str2
 	 * @return
@@ -1018,26 +1054,25 @@ public class StringUtils {
 				if (a.charAt(i - 1) == b.charAt(j - 1)) {
 					dp[i][j] = dp[i - 1][j - 1] + 1;
 				} else {
-					dp[i][j] = dp[i - 1][j] > dp[i][j - 1] ? dp[i - 1][j]
-							: dp[i][j - 1];
+					dp[i][j] = dp[i - 1][j] > dp[i][j - 1] ? dp[i - 1][j] : dp[i][j - 1];
 				}
 
 			}
 		}
 
-		/* 
-		 * 矩阵中，如果matrix[m][n]的值不等于matrix[m-1][n]的值也不等于matrix[m][n-1]的值， 
-		 * 则matrix[m][n]对应的字符为相似字符元，并将其存入result数组中。 
+		/*
+		 * 矩阵中，如果matrix[m][n]的值不等于matrix[m-1][n]的值也不等于matrix[m][n-1]的值，
+		 * 则matrix[m][n]对应的字符为相似字符元，并将其存入result数组中。
 		 */
 		int i = la, j = lb, k = 0;
 		while (dp[i][j] != 0) {
-			//满足头两个条件证明文本不同
+			// 满足头两个条件证明文本不同
 			if (dp[i][j] == dp[i - 1][j])
 				i--;
 			else if (dp[i][j] == dp[i][j - 1])
 				j--;
 			else {
-				//如果文本相同,那么储存相似节点值的id为上次循环中摄入的值,存该id
+				// 如果文本相同,那么储存相似节点值的id为上次循环中摄入的值,存该id
 				apath[k] = i - 1;
 				bpath[k++] = j - 1;
 				i--;
@@ -1045,43 +1080,44 @@ public class StringUtils {
 			}
 		}
 		System.out.println("similar length is" + dp[la][lb]);
-		//		for (int t = k - 1; t >= 0; t--)
-		//			System.out.print(listTitles1[apath[t]].info_name + ",");
-		//		
-		//		System.out.println();
-		//		for (int t = k - 1; t >= 0; t--)
-		//			System.out.print(listTitles2[bpath[t]].info_name + ",");
-		//		过滤文本内容中的特殊字符
-		//		for (int t = k - 1; t >= 0; t--)
-		//		{
-		//			String str1 = "";
-		//			String str2 = "";
-		//			if (listTitles1[apath[t]].content != null)
-		//				str1 = listTitles1[apath[t]].content
-		//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-		//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
-		//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
-		//			if (listTitles2[bpath[t]].content != null)
-		//				str2 = listTitles2[bpath[t]].content
-		//						.replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
-		//						.replaceAll("</[a-zA-Z]+[1-9]?>", "")
-		//						.replaceAll("\\s", "").replaceAll("&nbsp;", "");
-		//			if (str1.trim().equals(str2.trim())) {
-		//				listTitles1[apath[t]].isSimilar = 1;
-		//			}
-		//		}
+		// for (int t = k - 1; t >= 0; t--)
+		// System.out.print(listTitles1[apath[t]].info_name + ",");
+		//
+		// System.out.println();
+		// for (int t = k - 1; t >= 0; t--)
+		// System.out.print(listTitles2[bpath[t]].info_name + ",");
+		// 过滤文本内容中的特殊字符
+		// for (int t = k - 1; t >= 0; t--)
+		// {
+		// String str1 = "";
+		// String str2 = "";
+		// if (listTitles1[apath[t]].content != null)
+		// str1 = listTitles1[apath[t]].content
+		// .replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
+		// .replaceAll("</[a-zA-Z]+[1-9]?>", "")
+		// .replaceAll("\\s", "").replaceAll("&nbsp;", "");
+		// if (listTitles2[bpath[t]].content != null)
+		// str2 = listTitles2[bpath[t]].content
+		// .replaceAll("<[a-zA-Z]+[1-9]?[^><]*>", "")
+		// .replaceAll("</[a-zA-Z]+[1-9]?>", "")
+		// .replaceAll("\\s", "").replaceAll("&nbsp;", "");
+		// if (str1.trim().equals(str2.trim())) {
+		// listTitles1[apath[t]].isSimilar = 1;
+		// }
+		// }
 		return 1.0 * dp[la][lb] * 2 / (a.length() + b.length());
 	}
 
-	//	public static void main(String[] args) {
-	//		String content= "adsfa,a s d f:aasdf?,a;,ds ：asdf a,asf d\r\nasdf?asdf";
-	//List<String> split = split(content);
-	//for (String string : split) {
-	//	System.out.println(string);
-	//}
-	//	}
+	// public static void main(String[] args) {
+	// String content= "adsfa,a s d f:aasdf?,a;,ds ：asdf a,asf d\r\nasdf?asdf";
+	// List<String> split = split(content);
+	// for (String string : split) {
+	// System.out.println(string);
+	// }
+	// }
 	/**
 	 * 去掉文件名后缀
+	 * 
 	 * @param title
 	 * @return
 	 */
@@ -1097,6 +1133,7 @@ public class StringUtils {
 
 	/**
 	 * 拿到文件名后缀
+	 * 
 	 * @param title
 	 * @return
 	 */
