@@ -298,7 +298,7 @@ public class MachineUtils {
 
 	public static String runtimeErr(String cmd) throws IOException {
 		Process exec = Runtime.getRuntime().exec(cmd);
-		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getErrorStream(), "GBK"));
+		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getErrorStream(), "UTF-8"));
 		StringBuffer sb = new StringBuffer();
 		String line;
 		while ((line = in.readLine()) != null) {
@@ -307,9 +307,10 @@ public class MachineUtils {
 		return sb.toString();
 	}
 
-	public static String runtimeOut(String cmd) throws IOException {
+	public static String runtimeOut(String cmd) throws Exception {
 		Process exec = Runtime.getRuntime().exec(cmd);
-		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getInputStream(), "GBK"));
+		exec.waitFor();
+		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getInputStream(), "UTF-8"));
 		StringBuffer sb = new StringBuffer();
 		String line;
 		while ((line = in.readLine()) != null) {
@@ -321,13 +322,13 @@ public class MachineUtils {
 
 	public static String[] runtimeOutErr(String cmd) throws IOException {
 		Process exec = Runtime.getRuntime().exec(cmd);
-		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getInputStream(), "GBK"));
+		BufferedReader in = new BufferedReader(new InputStreamReader(exec.getInputStream(),  "UTF-8"));
 		StringBuffer sb1 = new StringBuffer();
 		String line;
 		while ((line = in.readLine()) != null) {
 			sb1.append(line).append("\r\n");
 		}
-		in = new BufferedReader(new InputStreamReader(exec.getErrorStream(), "GBK"));
+		in = new BufferedReader(new InputStreamReader(exec.getErrorStream(),  "UTF-8"));
 		StringBuffer sb2 = new StringBuffer();
 		while ((line = in.readLine()) != null) {
 			sb2.append(line).append("\r\n");
@@ -346,7 +347,7 @@ public class MachineUtils {
 	public static String[] runtimeCmd(String cmd) throws IOException {
 		ProcessBuilder pb = new ProcessBuilder();
 		Process start = pb.command(cmd.split(" ")).start();
-		BufferedReader in = new BufferedReader(new InputStreamReader(start.getInputStream(), "GBK"));
+		BufferedReader in = new BufferedReader(new InputStreamReader(start.getInputStream(),  "UTF-8"));
 		StringBuffer sb1 = new StringBuffer();
 		String line;
 		while ((line = in.readLine()) != null) {
