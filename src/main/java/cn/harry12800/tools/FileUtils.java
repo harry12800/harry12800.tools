@@ -39,8 +39,55 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-
 public class FileUtils {
+
+	public static Properties loadProps(String path) {
+		InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+		Properties p = new Properties();
+		try {
+			p.load(resourceAsStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
+
+	public static int getInt(Properties p, String key, int defaultValue) {
+		Object object = p.get(key);
+		if (object == null)
+			return defaultValue;
+		try {
+			return Integer.valueOf((String) object);
+		} catch (Exception e) {
+
+		}
+		return defaultValue;
+	}
+
+	public static Long getLong(Properties p, String key, Long defaultValue) {
+		Object object = p.get(key);
+		if (object == null)
+			return defaultValue;
+		try {
+			return Long.valueOf((String) object);
+		} catch (Exception e) {
+
+		}
+		return defaultValue;
+	}
+
+	public static boolean getBoolean(Properties p, String key, boolean defaultValue) {
+		Object object = p.get(key);
+		if (object == null)
+			return defaultValue;
+		try {
+			return Boolean.valueOf((String) object);
+		} catch (Exception e) {
+
+		}
+		return defaultValue;
+	}
+
 	/**
 	 * 
 	 * @param map
@@ -1307,6 +1354,7 @@ public class FileUtils {
 			return lists;
 		}
 	}
+
 	/**
 	 * 遍历一个目录下的文件，深层次
 	 * 
@@ -1391,26 +1439,27 @@ public class FileUtils {
 	 * @throws Exception
 	 */
 	public static String getMD5(String path) {
-        BigInteger bi = null;
-        try {
-            byte[] buffer = new byte[8192];
-            int len = 0;
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            File f = new File(path);
-            FileInputStream fis = new FileInputStream(f);
-            while ((len = fis.read(buffer)) != -1) {
-                md.update(buffer, 0, len);
-            }
-            fis.close();
-            byte[] b = md.digest();
-            bi = new BigInteger(1, b);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bi.toString(16);
-    }
+		BigInteger bi = null;
+		try {
+			byte[] buffer = new byte[8192];
+			int len = 0;
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			File f = new File(path);
+			FileInputStream fis = new FileInputStream(f);
+			while ((len = fis.read(buffer)) != -1) {
+				md.update(buffer, 0, len);
+			}
+			fis.close();
+			byte[] b = md.digest();
+			bi = new BigInteger(1, b);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bi.toString(16);
+	}
+
 	/**
 	 * 获取文件的Md5值
 	 * 
@@ -1420,23 +1469,23 @@ public class FileUtils {
 	 */
 	public static String getMD5(File f) throws Exception {
 		BigInteger bi = null;
-        try {
-            byte[] buffer = new byte[8192];
-            int len = 0;
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            FileInputStream fis = new FileInputStream(f);
-            while ((len = fis.read(buffer)) != -1) {
-                md.update(buffer, 0, len);
-            }
-            fis.close();
-            byte[] b = md.digest();
-            bi = new BigInteger(1, b);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bi.toString(16);
+		try {
+			byte[] buffer = new byte[8192];
+			int len = 0;
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			FileInputStream fis = new FileInputStream(f);
+			while ((len = fis.read(buffer)) != -1) {
+				md.update(buffer, 0, len);
+			}
+			fis.close();
+			byte[] b = md.digest();
+			bi = new BigInteger(1, b);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bi.toString(16);
 	}
 
 	static String getMD54ByteArray(String path) throws Exception {
@@ -1596,6 +1645,7 @@ public class FileUtils {
 		}
 		System.out.println();
 	}
+
 	/**
 	 * 将字节数组写入文件
 	 */
@@ -1619,9 +1669,10 @@ public class FileUtils {
 			}
 		}
 	}
+
 	/**
-	 * 批量重命名
-	 * 重命名格式，xxx %s xxx，其中%s为原有名称
+	 * 批量重命名 重命名格式，xxx %s xxx，其中%s为原有名称
+	 * 
 	 * @param formatter
 	 */
 	public static void batchRename(String dirPath, String formatter) {
