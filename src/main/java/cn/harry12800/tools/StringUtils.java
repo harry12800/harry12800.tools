@@ -1144,8 +1144,9 @@ public class StringUtils {
 		}
 		File file = new File(title);
 		int lastIndexOf = file.getName().lastIndexOf(".");
+		System.out.println(file.getName());
 		if (lastIndexOf < 0)
 			return "";
-		return title.substring(lastIndexOf, title.length());
+		return file.getName().substring(lastIndexOf, file.getName().length());
 	}
 }
