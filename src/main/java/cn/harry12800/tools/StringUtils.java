@@ -2,6 +2,7 @@ package cn.harry12800.tools;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,10 +27,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 	public static final String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
@@ -1141,7 +1142,8 @@ public class StringUtils {
 		if (title == null) {
 			return "";
 		}
-		int lastIndexOf = title.lastIndexOf(".");
+		File file = new File(title);
+		int lastIndexOf = file.getName().lastIndexOf(".");
 		if (lastIndexOf < 0)
 			return "";
 		return title.substring(lastIndexOf, title.length());
