@@ -44,8 +44,8 @@ public class FileUtils {
 	public static Properties loadProps(String path) {
 		InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
 		Properties p = new Properties();
-		try {
-			p.load(resourceAsStream);
+		try (InputStreamReader read = new InputStreamReader(resourceAsStream, "utf-8");){
+			p.load(read);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
